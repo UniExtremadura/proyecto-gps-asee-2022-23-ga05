@@ -1,0 +1,54 @@
+Index: app/src/main/java/es/unex/dinopedia/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package es.unex.dinopedia;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\n\r\nimport com.google.gson.Gson;\r\n\r\nimport java.io.BufferedReader;\r\nimport java.io.IOException;\r\nimport java.io.InputStreamReader;\r\nimport java.util.ArrayList;\r\nimport java.util.Arrays;\r\nimport java.util.List;\r\n\r\nimport es.unex.dinopedia.databinding.ActivityMainBinding;\r\nimport es.unex.dinopedia.roomdb.DinosaurioDatabase;\r\n\r\npublic class MainActivity extends AppCompatActivity{\r\n\r\n    ActivityMainBinding binding;\r\n    FragmentManager fragmentManager = getSupportFragmentManager();\r\n    DinosaurioAdapter mAdapter = new DinosaurioAdapter(MainActivity.this, new DinosaurioAdapter.OnItemClickListener() {\r\n        @Override public void onItemClick(Dinosaurio item) {\r\n            //Snackbar.make(view, \"Item \"+item.getName()+\" Clicked\", Snackbar.LENGTH_LONG).show();\r\n        }\r\n    });\r\n    List<Dinosaurio> dino = new ArrayList<>();\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_main);\r\n        Button bEnciclopedia = findViewById(R.id.bEnciclopedia);\r\n        Button bCombate = findViewById(R.id.bCombate);\r\n\r\n\r\n        AppExecutors.getInstance().diskIO().execute(\r\n                new Runnable() {\r\n                    @Override\r\n                    public void run() {\r\n                        LogroDatabase.getInstance(MainActivity.this).getDao().deleteAll();\r\n\r\n                        if (LogroDatabase.getInstance(MainActivity.this).getDao().count() == 0) {\r\n                            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.logros)));\r\n                            String receiveString = \"\";\r\n                            StringBuilder stringBuilder = new StringBuilder();\r\n\r\n                            while (true) {\r\n                                try {\r\n                                    if (!((receiveString = bufferedReader.readLine()) != null))\r\n                                        break;\r\n                                } catch (IOException e) {\r\n                                    e.printStackTrace();\r\n                                }\r\n                                stringBuilder.append(\"\\n\").append(receiveString);\r\n                            }\r\n\r\n                            String read = stringBuilder.toString();\r\n\r\n                            List<Logro> logro = Arrays.asList(new Gson().fromJson(read, Logro[].class));\r\n                            for (int i = 0; i < logro.size(); i++) {\r\n                                Logro l = logro.get(i);\r\n                                LogroDatabase.getInstance(MainActivity.this).getDao().insert(l);\r\n                            }\r\n                        }\r\n\r\n\r\n                        AppExecutors.getInstance().diskIO().execute(new Runnable() {\r\n                            @Override\r\n                            public void run() {\r\n                                //DinosaurioDatabase.getInstance(MainActivity.this).getDao().deleteAll();\r\n\r\n\r\n                                if (DinosaurioDatabase.getInstance(MainActivity.this).getDao().count() == 0) {\r\n                                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.jurassicpark)));\r\n                                    String receiveString = \"\";\r\n                                    StringBuilder stringBuilder = new StringBuilder();\r\n\r\n                                    while (true) {\r\n                                        try {\r\n                                            if (!((receiveString = bufferedReader.readLine()) != null))\r\n                                                break;\r\n                                        } catch (IOException e) {\r\n                                            e.printStackTrace();\r\n                                        }\r\n                                        stringBuilder.append(\"\\n\").append(receiveString);\r\n                                    }\r\n\r\n                                    String read = stringBuilder.toString();\r\n\r\n                                    List<Dinosaurio> dino = Arrays.asList(new Gson().fromJson(read, Dinosaurio[].class));\r\n                                    for (int i = 0; i < dino.size(); i++) {\r\n                                        Dinosaurio d = dino.get(i);\r\n                                        DinosaurioDatabase.getInstance(MainActivity.this).getDao().insert(d);\r\n                                    }\r\n                                }\r\n                            }\r\n                        });\r\n\r\n                        AppExecutors.getInstance().diskIO().execute(new Runnable() {\r\n                            @Override\r\n                            public void run() {\r\n                                DinosaurioDatabase database = DinosaurioDatabase.getInstance(MainActivity.this);\r\n                                dino = database.getDao().getAll();\r\n                                if (dino.size() != 0) {\r\n                                    AppExecutors.getInstance().mainThread().execute(() -> mAdapter.load(dino));\r\n                                }\r\n                            }\r\n                        });\r\n\r\n                    }\r\n                });\r\n        bEnciclopedia.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                Intent intent = new Intent(MainActivity.this, EnciclopediaActivity.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n\r\n\r\n        AppExecutors.getInstance().diskIO().execute(new Runnable() {\r\n            @Override\r\n            public void run() {\r\n                //DinosaurioDatabase.getInstance(MainActivity.this).getDao().deleteAll();\r\n\r\n\r\n                if (DinosaurioDatabase.getInstance(MainActivity.this).getDao().count() == 0) {\r\n                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.jurassicpark)));\r\n                    String receiveString = \"\";\r\n                    StringBuilder stringBuilder = new StringBuilder();\r\n\r\n                    while (true) {\r\n                        try {\r\n                            if (!((receiveString = bufferedReader.readLine()) != null)) break;\r\n                        } catch (IOException e) {\r\n                            e.printStackTrace();\r\n                        }\r\n                        stringBuilder.append(\"\\n\").append(receiveString);\r\n                    }\r\n\r\n                    String read = stringBuilder.toString();\r\n\r\n                    List<Dinosaurio> dino = Arrays.asList(new Gson().fromJson(read, Dinosaurio[].class));\r\n                    for (int i = 0; i < dino.size(); i++) {\r\n                        Dinosaurio d = dino.get(i);\r\n                        DinosaurioDatabase.getInstance(MainActivity.this).getDao().insert(d);\r\n                    }\r\n                }\r\n            }\r\n        });\r\n\r\n        AppExecutors.getInstance().diskIO().execute(new Runnable() {\r\n            @Override\r\n            public void run() {\r\n                DinosaurioDatabase database = DinosaurioDatabase.getInstance(MainActivity.this);\r\n                dino = database.getDao().getAll();\r\n                if(dino.size()!=0){\r\n                    AppExecutors.getInstance().mainThread().execute(()->mAdapter.load(dino));\r\n                }\r\n            }\r\n        });\r\n\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/es/unex/dinopedia/MainActivity.java b/app/src/main/java/es/unex/dinopedia/MainActivity.java
+--- a/app/src/main/java/es/unex/dinopedia/MainActivity.java	(revision 28c2f549bb53694eabc955fafe38b2548034aa1b)
++++ b/app/src/main/java/es/unex/dinopedia/MainActivity.java	(date 1669064547339)
+@@ -5,6 +5,9 @@
+ import android.view.View;
+ import android.widget.Button;
+ 
++import androidx.appcompat.app.AppCompatActivity;
++import androidx.fragment.app.FragmentManager;
++
+ import com.google.gson.Gson;
+ 
+ import java.io.BufferedReader;
+@@ -16,8 +19,9 @@
+ 
+ import es.unex.dinopedia.databinding.ActivityMainBinding;
+ import es.unex.dinopedia.roomdb.DinosaurioDatabase;
++import es.unex.dinopedia.roomdb.LogroDatabase;
+ 
+-public class MainActivity extends AppCompatActivity{
++public class MainActivity extends AppCompatActivity {
+ 
+     ActivityMainBinding binding;
+     FragmentManager fragmentManager = getSupportFragmentManager();
+@@ -31,8 +35,6 @@
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_main);
+-        Button bEnciclopedia = findViewById(R.id.bEnciclopedia);
+-        Button bCombate = findViewById(R.id.bCombate);
+ 
+ 
+         AppExecutors.getInstance().diskIO().execute(
+@@ -111,13 +113,6 @@
+ 
+                     }
+                 });
+-        bEnciclopedia.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View view) {
+-                Intent intent = new Intent(MainActivity.this, EnciclopediaActivity.class);
+-                startActivity(intent);
+-            }
+-        });
+ 
+ 
+         AppExecutors.getInstance().diskIO().execute(new Runnable() {
