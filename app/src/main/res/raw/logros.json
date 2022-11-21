@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Inicia Sesión en la aplicación",
+    "check": "false"
+  },
+  {
+    "name": "Realiza tu primer combate con la aplicación",
+    "check": "false"
+  },
+  {
+    "name": "Marca tu primer dinosaurio favorito",
+    "check": "false"
+  },
+  {
+    "name": "Primera victoria de un dinosaurio carnívoro en tu aplicación",
+    "check": "false"
+  },
+  {
+    "name": "Primera victoria de un dinosaurio herbívoro en tu aplicación",
+    "check": "false"
+  },
+  {
+    "name": "Primera victoria de un dinosaurio omnívoro en tu aplicación",
+    "check": "false"
+  },
+  {
+    "name": "Primera victoria de un dinosaurio del jurásico en tu aplicación",
+    "check": "false"
+  },
+  {
+    "name": "Primera victoria de un dinosaurio del cretácico en tu aplicación",
+    "check": "false"
+  },
+  {
+    "name": "Primera victoria de un dinosaurio del triásico en tu aplicación",
+    "check": "false"
+  }
+]
