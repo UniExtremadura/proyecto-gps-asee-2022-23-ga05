@@ -1,30 +1,13 @@
 package es.unex.dinopedia;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 
-import com.google.gson.Gson;
+import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import es.unex.dinopedia.databinding.ActivityMainBinding;
-import es.unex.dinopedia.roomdb.DinosaurioDatabase;
-import es.unex.dinopedia.roomdb.UsuarioDatabase;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     ActivityMainBinding binding;
     FragmentManager fragmentManager = getSupportFragmentManager();
@@ -116,10 +99,7 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new AlbumFragment());
                     break;
             }
-            return true;
         });
-
-
     }
 
     private void replaceFragment(Fragment fragment){
