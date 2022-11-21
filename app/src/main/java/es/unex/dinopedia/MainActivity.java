@@ -33,29 +33,12 @@ public class MainActivity extends AppCompatActivity {
         }
     });
     List<Dinosaurio> dino = new ArrayList<>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button bEnciclopedia = findViewById(R.id.bEnciclopedia);
-        Button bCombate = findViewById(R.id.bCombate);
-
-        bCombate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, CombateActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        bEnciclopedia.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, EnciclopediaActivity.class);
-                startActivity(intent);
-            }
-        });
-
 
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
@@ -99,5 +82,43 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        MainFragment mF = new MainFragment(MainActivity.this, binding);
+        replaceFragment(mF);
+
+        EnciclopediaFragment eF = new EnciclopediaFragment(MainActivity.this);
+        FavoritoFragment fF = new FavoritoFragment(MainActivity.this);
+
+        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+            switch (item.getItemId()){
+                case R.id.principal:
+                    replaceFragment(mF);
+                    break;
+                case R.id.enciclopedia:
+                    replaceFragment(eF);
+                    break;
+                case R.id.batalla:
+                    replaceFragment(new CombateFragment());
+                    break;
+                case R.id.favorito:
+                    replaceFragment(fF);
+                    break;
+                case R.id.logros:
+                    replaceFragment(new AlbumFragment());
+                    break;
+            }
+            return true;
+        });
+
+
     }
+
+    private void replaceFragment(Fragment fragment){
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameLayout, fragment);
+        fragmentTransaction.commit();
+    }
+
 }
