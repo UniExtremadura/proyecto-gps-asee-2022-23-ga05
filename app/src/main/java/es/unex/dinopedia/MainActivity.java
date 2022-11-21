@@ -6,10 +6,25 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import es.unex.dinopedia.databinding.ActivityMainBinding;
+import com.google.gson.Gson;
+
+import es.unex.dinopedia.roomdb.DinosaurioDatabase;
+import es.unex.dinopedia.roomdb.UsuarioDatabase;
 
 public class MainActivity extends AppCompatActivity{
 
-    ActivityMainBinding binding;
+    es.unex.dinopedia.databinding.ActivityMainBinding binding;
     FragmentManager fragmentManager = getSupportFragmentManager();
     DinosaurioAdapter mAdapter = new DinosaurioAdapter(MainActivity.this, new DinosaurioAdapter.OnItemClickListener() {
         @Override public void onItemClick(Dinosaurio item) {
@@ -99,6 +114,7 @@ public class MainActivity extends AppCompatActivity{
                     replaceFragment(new AlbumFragment());
                     break;
             }
+            return true;
         });
     }
 
