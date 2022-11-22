@@ -45,7 +45,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private View vista;
-    private final Context context;
+    private Context context;
     ActivityMainBinding binding;
     private boolean sesionIniciada;
     private DinosaurioAdapter mAdapter;
@@ -57,6 +57,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private List<Dinosaurio> dinoList;
     private List<Dinosaurio> copiaDinosaurio;
 
+    public MainFragment(){
+    }
 
     public MainFragment(Context cont, ActivityMainBinding bind) {
         context = cont;
@@ -67,6 +69,16 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             }
         });
         binding = bind;
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                UsuarioDatabase database = UsuarioDatabase.getInstance(context);
+                if(database.getDao().getUsuario()!=null)
+                    sesionIniciada=true;
+                else
+                    sesionIniciada=false;
+            }
+        });
     }
 
     /**
@@ -137,7 +149,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    public void mostrarBotones(){
+     public void mostrarBotones(){
         binding.bottomNavigationView.getMenu().getItem(3).setVisible(sesionIniciada);
         binding.bottomNavigationView.getMenu().getItem(4).setVisible(sesionIniciada);
         Button bCuenta = vista.findViewById(R.id.bCuenta);
