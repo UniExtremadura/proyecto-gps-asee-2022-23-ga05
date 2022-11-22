@@ -31,6 +31,7 @@ import java.util.Random;
 
 import es.unex.dinopedia.databinding.ActivityMainBinding;
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
+import es.unex.dinopedia.roomdb.UsuarioDatabase;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,14 +60,15 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private List<Dinosaurio> dinoList;
     private List<Dinosaurio> copiaDinosaurio;
 
-    public MainFragment(){
+    public MainFragment() {
     }
 
     public MainFragment(Context cont, ActivityMainBinding bind) {
         context = cont;
-        dinoList=new ArrayList<>();
+        dinoList = new ArrayList<>();
         mAdapter = new DinosaurioAdapter(context, new DinosaurioAdapter.OnItemClickListener() {
-            @Override public void onItemClick(Dinosaurio item) {
+            @Override
+            public void onItemClick(Dinosaurio item) {
                 //Snackbar.make(view, "Item "+item.getName()+" Clicked", Snackbar.LENGTH_LONG).show();
             }
         });
@@ -75,7 +77,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             public void run() {
                 DinosaurioDatabase database = DinosaurioDatabase.getInstance(context);
                 dinoList = database.getDao().getAll();
-                AppExecutors.getInstance().mainThread().execute(()->copiaDinosaurio=dinoList);
+                AppExecutors.getInstance().mainThread().execute(() -> copiaDinosaurio = dinoList);
             }
         });
         formatoFecha = new SimpleDateFormat("dd/MM/yy");
@@ -83,7 +85,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         fecha = new Date(momento);
         binding = bind;
 
-        if(dinoList!=null) {
+        if (dinoList != null) {
             if (dinoList.size() != 0) {
                 Random random_method = new Random();
                 dinosaurioDelDia = random_method.nextInt(copiaDinosaurio.size());
@@ -91,6 +93,17 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 dinosaurioDelDia = 0;
             }
         }
+        binding = bind;
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                UsuarioDatabase database = UsuarioDatabase.getInstance(context);
+                if (database.getDao().getUsuario() != null)
+                    sesionIniciada = true;
+                else
+                    sesionIniciada = false;
+            }
+        });
     }
 
     /**
@@ -122,9 +135,34 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         vista = rootView;
+        Button bIniciarSesion = rootView.findViewById(R.id.bIniciarSesion);
+        Button bCuenta = rootView.findViewById(R.id.bCuenta);
+
+        bIniciarSesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, IniciarSesionActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
+
+        bCuenta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        UsuarioDatabase database = UsuarioDatabase.getInstance(context);
+                        Intent intent = new Intent(context, CuentaActivity.class);
+                        intent.putExtra("USUARIO", database.getDao().getUsuario().getName());
+                        AppExecutors.getInstance().mainThread().execute(() -> startActivityForResult(intent, 2));
+                    }
+                });
+            }
+        });
 
         return rootView;
     }
@@ -136,10 +174,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    public void elegirDinosaurio(){
+    public void elegirDinosaurio() {
         String nombre;
         Random random_method = new Random();
-        if(copiaDinosaurio!=null) {
+        if (copiaDinosaurio != null) {
             if (copiaDinosaurio.size() != 0) {
                 int nuevoDinosaurio = random_method.nextInt(copiaDinosaurio.size());
                 long momento = System.currentTimeMillis();
@@ -164,11 +202,55 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    public void mostrarBotones() {
+        binding.bottomNavigationView.getMenu().getItem(3).setVisible(sesionIniciada);
+        binding.bottomNavigationView.getMenu().getItem(4).setVisible(sesionIniciada);
+        Button bCuenta = vista.findViewById(R.id.bCuenta);
+        Button bIniciarSesion = vista.findViewById(R.id.bIniciarSesion);
+        if (sesionIniciada == true) {
+            bCuenta.setVisibility(vista.VISIBLE);
+            bIniciarSesion.setVisibility(vista.INVISIBLE);
+        } else {
+            bCuenta.setVisibility(vista.INVISIBLE);
+            bIniciarSesion.setVisibility(vista.VISIBLE);
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-        if(dinoList.size()!=0){
+        mostrarBotones();
+        if (dinoList.size() != 0) {
             elegirDinosaurio();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    UsuarioDatabase database = UsuarioDatabase.getInstance(context);
+                    if (database.getDao().getUsuario() != null)
+                        sesionIniciada = true;
+                    else
+                        sesionIniciada = false;
+                }
+            });
+        }
+        if (requestCode == 2) {
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    UsuarioDatabase database = UsuarioDatabase.getInstance(context);
+                    if (database.getDao().getUsuario() != null)
+                        sesionIniciada = true;
+                    else
+                        sesionIniciada = false;
+                }
+            });
         }
     }
 }
