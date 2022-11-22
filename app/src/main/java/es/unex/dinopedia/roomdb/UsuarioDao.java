@@ -26,4 +26,7 @@ public interface UsuarioDao {
 
     @Update
     int update(Usuario item);
+
+    @Query("DELETE FROM Usuario WHERE id=:ID")
+    void deleteUsuarioID(long ID);
 }

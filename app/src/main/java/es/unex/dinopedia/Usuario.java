@@ -23,6 +23,7 @@ public class Usuario {
     @NonNull
     private String name;
 
+
     /**
      * No args constructor for use in serialization
      *
@@ -58,17 +59,22 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return "Dinosaurio{" +
+        return "Usuario{" +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(name);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario = (Usuario) o;
+        return id == usuario.id && name.equals(usuario.name);
     }
 
-    public String toLog() {
-        return "Name:" + name + ITEM_SEP;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
     }
 }

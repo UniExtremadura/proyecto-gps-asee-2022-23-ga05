@@ -1,13 +1,14 @@
 package es.unex.dinopedia;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,22 +16,15 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import es.unex.dinopedia.AlbumFragment;
-import es.unex.dinopedia.AppExecutors;
-import es.unex.dinopedia.CombateFragment;
-import es.unex.dinopedia.Dinosaurio;
-import es.unex.dinopedia.DinosaurioAdapter;
-import es.unex.dinopedia.EnciclopediaFragment;
-import es.unex.dinopedia.FavoritoFragment;
-import es.unex.dinopedia.MainFragment;
-import es.unex.dinopedia.R;
 import es.unex.dinopedia.databinding.ActivityMainBinding;
+import com.google.gson.Gson;
+
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
+import es.unex.dinopedia.roomdb.UsuarioDatabase;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
-    ActivityMainBinding binding;
+    es.unex.dinopedia.databinding.ActivityMainBinding binding;
     FragmentManager fragmentManager = getSupportFragmentManager();
     DinosaurioAdapter mAdapter = new DinosaurioAdapter(MainActivity.this, new DinosaurioAdapter.OnItemClickListener() {
         @Override public void onItemClick(Dinosaurio item) {
@@ -50,6 +44,12 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 //DinosaurioDatabase.getInstance(MainActivity.this).getDao().deleteAll();
 
+                if(UsuarioDatabase.getInstance(MainActivity.this).getDao().getUsuario()!=null) {
+                    //UsuarioDatabase.getInstance(MainActivity.this).getDao().deleteAll();
+                    UsuarioDatabase database = UsuarioDatabase.getInstance(MainActivity.this);
+                    Usuario u = database.getDao().getUsuario();
+                    database.getDao().deleteUsuarioID(u.getId());
+                }
 
                 if (DinosaurioDatabase.getInstance(MainActivity.this).getDao().count() == 0) {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.jurassicpark)));
@@ -116,8 +116,6 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
-
-
     }
 
     private void replaceFragment(Fragment fragment){
