@@ -115,6 +115,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
 
     }
 
+    @Override
+    public void classDinosaurio(Dinosaurio d) {
+        Intent intent = new Intent(MainActivity.this, DinosaurioInfoActivity.class);
+        intent.putExtra("id", d.getId());
+        startActivity(intent);
+    }
+
     private void replaceFragment(Fragment fragment){
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment);
