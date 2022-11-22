@@ -128,10 +128,5 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         fragmentTransaction.commit();
     }
 
-    @Override
-    public void classDinosaurio(Dinosaurio d) {
-        Intent intent = new Intent(MainActivity.this, DinosaurioInfoActivity.class);
-        intent.putExtra("id", d.getId());
-        startActivity(intent);
-    }
+
 }
