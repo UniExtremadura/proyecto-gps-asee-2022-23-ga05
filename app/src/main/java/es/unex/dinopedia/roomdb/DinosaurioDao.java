@@ -15,14 +15,11 @@ public interface DinosaurioDao {
     @Query("SELECT * FROM Dinosaurio")
     List<Dinosaurio> getAll();
 
-    @Query("SELECT name FROM Dinosaurio")
-    List<String> getNombres();
+    @Query("SELECT * FROM Dinosaurio WHERE id=:ID")
+    Dinosaurio getDinosaurioId(long ID);
 
     @Query("SELECT * FROM Dinosaurio WHERE diet=:opcion OR periodName=:opcion")
     List<Dinosaurio> getOpciones(String opcion);
-
-    @Query("SELECT * FROM Dinosaurio WHERE id=:ID")
-    Dinosaurio getDinosaurioId(long ID);
 
     @Insert
     long insert(Dinosaurio item);
