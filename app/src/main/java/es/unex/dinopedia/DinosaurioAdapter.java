@@ -90,7 +90,7 @@ public class DinosaurioAdapter extends RecyclerView.Adapter<DinosaurioAdapter.Vi
 
             // - Get the references to every widget of the Item View
 
-            nombre =  itemView.findViewById(R.id.tHistorial);
+            nombre =  itemView.findViewById(R.id.nombreD);
         }
 
         public void bind(final Dinosaurio dinosaurio, final OnItemClickListener listener) {
@@ -107,5 +107,4 @@ public class DinosaurioAdapter extends RecyclerView.Adapter<DinosaurioAdapter.Vi
             });
         }
     }
-
 }

@@ -12,10 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -24,9 +20,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-//import es.unex.dinopedia.database.DinosaurioCRUD;
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
 
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link EnciclopediaFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
 public class EnciclopediaFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -39,7 +39,7 @@ public class EnciclopediaFragment extends Fragment {
     private String mParam2;
 
     private Context context;
-    private List<Dinosaurio> dinoList;
+
 
     public EnciclopediaFragment(){
     }
@@ -47,7 +47,39 @@ public class EnciclopediaFragment extends Fragment {
     public EnciclopediaFragment(Context cont) {
         // Required empty public constructor
         context = cont;
+    }
 
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment EnciclopediaFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static EnciclopediaFragment newInstance(String param1, String param2, Context context, List<Dinosaurio> dino) {
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        return null;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        return null;
     }
 
 

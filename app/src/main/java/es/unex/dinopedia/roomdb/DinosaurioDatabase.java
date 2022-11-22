@@ -18,6 +18,5 @@ public abstract class DinosaurioDatabase extends RoomDatabase {
         }
         return instance;
     }
-
     public abstract DinosaurioDao getDao();
 }
