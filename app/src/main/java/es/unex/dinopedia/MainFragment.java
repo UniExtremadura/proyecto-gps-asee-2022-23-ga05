@@ -1,11 +1,16 @@
 package es.unex.dinopedia;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
@@ -14,6 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import org.json.JSONArray;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -117,7 +124,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         vista = rootView;
-
         return rootView;
     }
 
@@ -125,14 +131,11 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
         //ft.replace(R.id.frame_container, fragment).addToBackStack(null).commit();
-
     }
-
 
     @Override
     public void onResume() {
         super.onResume();
-
     }
 
 }

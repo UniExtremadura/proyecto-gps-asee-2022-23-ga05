@@ -109,7 +109,6 @@ public class CombateFragment extends Fragment {
             }
         });
 
-
         return viewMain;
     }
 
@@ -124,15 +123,18 @@ public class CombateFragment extends Fragment {
     public void combatir(){
         if(dinosaurio1!=null && dinosaurio2!=null) {
             Intent intent = new Intent(context, CombateResultActivity.class);
-            if (Integer.parseInt(dinosaurio1.getLengthMeters()) < Integer.parseInt(dinosaurio2.getLengthMeters())) {
+            if (Float.parseFloat(dinosaurio1.getLengthMeters()) < Float.parseFloat(dinosaurio2.getLengthMeters())) {
                 intent.putExtra("GANADOR", dinosaurio2.getName());
+
             }
-            if (Integer.parseInt(dinosaurio1.getLengthMeters()) > Integer.parseInt(dinosaurio2.getLengthMeters())) {
+            if (Float.parseFloat(dinosaurio1.getLengthMeters()) > Float.parseFloat(dinosaurio2.getLengthMeters())) {
                 intent.putExtra("GANADOR", dinosaurio1.getName());
+
             }
-            if (Integer.parseInt(dinosaurio1.getLengthMeters()) == Integer.parseInt(dinosaurio2.getLengthMeters())) {
+            if (Float.parseFloat(dinosaurio1.getLengthMeters()) == Float.parseFloat(dinosaurio2.getLengthMeters())) {
                 intent.putExtra("EMPATE1", dinosaurio1.getName());
                 intent.putExtra("EMPATE2", dinosaurio2.getName());
+
             }
             startActivity(intent);
         }

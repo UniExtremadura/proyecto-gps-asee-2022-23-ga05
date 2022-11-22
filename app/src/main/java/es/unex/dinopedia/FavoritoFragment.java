@@ -4,8 +4,6 @@ import android.content.Context;
 
 import androidx.fragment.app.Fragment;
 
-
-
 public class FavoritoFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -23,6 +21,5 @@ public class FavoritoFragment extends Fragment {
     public FavoritoFragment(Context cont) {
         // Required empty public constructor
         context = cont;
-
     }
 }
