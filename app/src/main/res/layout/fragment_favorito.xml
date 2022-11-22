@@ -6,10 +6,10 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/tHolaCombate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hola, esta es la actividad de combate"
+        android:id="@+id/textView2"
+        android:layout_width="49dp"
+        android:layout_height="16dp"
+        android:text="Favorito"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

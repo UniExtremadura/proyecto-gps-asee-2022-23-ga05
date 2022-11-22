@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <TextView
+        android:id="@+id/tNombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nombre Dinosaurio"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.179"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.268" />
+
+    <TextView
+        android:id="@+id/tDieta"
+        android:layout_width="144dp"
+        android:layout_height="20dp"
+        android:text="Dieta Dinosaurio"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.198"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tNombre"
+        app:layout_constraintVertical_bias="0.079" />
+
+    <TextView
+        android:id="@+id/tLivedIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lived In Dinosaurio"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.178"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tDieta"
+        app:layout_constraintVertical_bias="0.081" />
+
+    <TextView
+        android:id="@+id/tType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Type Dinosaurio"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.167"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tLivedIn"
+        app:layout_constraintVertical_bias="0.08" />
+
+    <TextView
+        android:id="@+id/tSpecies"
+        android:layout_width="148dp"
+        android:layout_height="20dp"
+        android:text="Especie Dinosaurio"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.197"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tType"
+        app:layout_constraintVertical_bias="0.098" />
+
+    <TextView
+        android:id="@+id/tPeriodName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Period Name Dinosaurio"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tSpecies"
+        app:layout_constraintVertical_bias="0.102" />
+
+    <TextView
+        android:id="@+id/tLengthMeters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Length Meters Dinosaurio"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.208"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tPeriodName"
+        app:layout_constraintVertical_bias="0.106" />
+
+    <Button
+        android:id="@+id/bCompartir"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Compartir"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.939" />
+</androidx.constraintlayout.widget.ConstraintLayout>
