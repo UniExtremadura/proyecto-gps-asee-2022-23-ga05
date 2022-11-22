@@ -1,12 +1,10 @@
 package es.unex.dinopedia;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,41 +22,37 @@ public class CombateFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public CombateFragment() {
+    private static Context context;
+
+    public CombateFragment(Context cont) {
         // Required empty public constructor
+        context = cont;
     }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+
      * @return A new instance of fragment CombateFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static CombateFragment newInstance(String param1, String param2) {
-        CombateFragment fragment = new CombateFragment();
+    public static CombateFragment newInstance(Context cont) {
+        CombateFragment fragment = new CombateFragment(cont);
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+        context = cont;
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return null;
+    public void onResume() {
+        super.onResume();
+
     }
 }

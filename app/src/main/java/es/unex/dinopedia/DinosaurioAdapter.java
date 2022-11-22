@@ -107,4 +107,5 @@ public class DinosaurioAdapter extends RecyclerView.Adapter<DinosaurioAdapter.Vi
             });
         }
     }
+
 }

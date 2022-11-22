@@ -191,4 +191,5 @@ public class Dinosaurio {
 				+ type + ITEM_SEP + "Species:" + species + ITEM_SEP + "Period:" + periodName
 				+ ITEM_SEP + "LengthMeters:" + lengthMeters + ITEM_SEP + "Favorite:" + favorite;
 	}
+
 }
