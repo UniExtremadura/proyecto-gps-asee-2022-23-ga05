@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                     replaceFragment(eF);
                     break;
                 case R.id.batalla:
-                    replaceFragment(new CombateFragment());
+                    replaceFragment(new CombateFragment(MainActivity.this));
                     break;
                 case R.id.favorito:
                     replaceFragment(fF);
