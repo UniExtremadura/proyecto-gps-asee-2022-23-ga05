@@ -23,6 +23,9 @@ public class Usuario {
     @NonNull
     private String name;
 
+    private boolean modo;
+
+    private boolean infoDino;
 
     /**
      * No args constructor for use in serialization
@@ -35,10 +38,12 @@ public class Usuario {
     /**
      * @param name
      */
-    public Usuario(long id, String name) {
+    public Usuario(long id, String name, boolean modo, boolean infoDino) {
         super();
         this.id = id;
         this.name = name;
+        this.modo = modo;
+        this.infoDino = infoDino;
     }
 
     public String getName() {
@@ -57,12 +62,20 @@ public class Usuario {
         this.id = id;
     }
 
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+    public boolean isModo() {
+        return modo;
+    }
+
+    public void setModo(boolean modo) {
+        this.modo = modo;
+    }
+
+    public boolean isInfoDino() {
+        return infoDino;
+    }
+
+    public void setInfoDino(boolean infoDino) {
+        this.infoDino = infoDino;
     }
 
     @Override
@@ -70,11 +83,21 @@ public class Usuario {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Usuario usuario = (Usuario) o;
-        return id == usuario.id && name.equals(usuario.name);
+        return id == usuario.id && modo == usuario.modo && infoDino == usuario.infoDino && name.equals(usuario.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id, name, modo, infoDino);
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", modo=" + modo +
+                ", infoDino=" + infoDino +
+                '}';
     }
 }

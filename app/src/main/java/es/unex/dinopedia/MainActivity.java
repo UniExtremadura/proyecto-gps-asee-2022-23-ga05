@@ -22,7 +22,7 @@ import com.google.gson.Gson;
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
 import es.unex.dinopedia.roomdb.UsuarioDatabase;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements MainActivityInterface{
 
     es.unex.dinopedia.databinding.ActivityMainBinding binding;
     FragmentManager fragmentManager = getSupportFragmentManager();
@@ -116,52 +116,6 @@ public class MainActivity extends AppCompatActivity{
             }
             return true;
         });
-            public void run() {
-                DinosaurioDatabase database = DinosaurioDatabase.getInstance(MainActivity.this);
-                dino = database.getDao().getAll();
-                if(dino.size()!=0){
-                    AppExecutors.getInstance().mainThread().execute(()->mAdapter.load(dino));
-                }
-            }
-        });
-
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        MainFragment mF = new MainFragment(MainActivity.this, binding);
-        replaceFragment(mF);
-
-        EnciclopediaFragment eF = new EnciclopediaFragment(MainActivity.this);
-        FavoritoFragment fF = new FavoritoFragment(MainActivity.this);
-
-        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-            switch (item.getItemId()){
-                case R.id.principal:
-                    replaceFragment(mF);
-                    break;
-                case R.id.enciclopedia:
-                    replaceFragment(eF);
-                    break;
-                case R.id.batalla:
-                    replaceFragment(new CombateFragment());
-                    break;
-                case R.id.favorito:
-                    replaceFragment(fF);
-                    break;
-                case R.id.logros:
-                    replaceFragment(new AlbumFragment());
-                    break;
-            }
-            return true;
-        });
-
-
-    }
-
-    private void replaceFragment(Fragment fragment){
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frameLayout, fragment);
-        fragmentTransaction.commit();
     }
 
     @Override
