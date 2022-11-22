@@ -63,10 +63,10 @@
         android:text="Modo Noche"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.196"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/eTUsuario"
         app:layout_constraintTop_toBottomOf="@+id/eTUsuario"
-        app:layout_constraintVertical_bias="0.21" />
+        app:layout_constraintVertical_bias="0.072" />
 
     <Button
         android:id="@+id/bCerrarSesion"
@@ -76,10 +76,10 @@
         android:text="Cerrar Sesion"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.217"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/bContactar"
         app:layout_constraintTop_toBottomOf="@+id/bContactar"
-        app:layout_constraintVertical_bias="0.933" />
+        app:layout_constraintVertical_bias="0.75" />
 
     <Button
         android:id="@+id/bAyuda"
@@ -88,10 +88,10 @@
         android:text="Ayuda"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.173"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/eTUsuario"
         app:layout_constraintTop_toBottomOf="@+id/swModo"
-        app:layout_constraintVertical_bias="0.139" />
+        app:layout_constraintVertical_bias="0.255" />
 
     <Button
         android:id="@+id/bContactar"
@@ -100,8 +100,21 @@
         android:text="Contactanos"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.211"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/bAyuda"
         app:layout_constraintTop_toBottomOf="@+id/bAyuda"
-        app:layout_constraintVertical_bias="0.103" />
+        app:layout_constraintVertical_bias="0.111" />
+
+    <Switch
+        android:id="@+id/sInfoDino"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:text="Informacion del dinosaurio simplificada"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/swModo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.691" />
 </androidx.constraintlayout.widget.ConstraintLayout>

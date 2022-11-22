@@ -3,6 +3,7 @@ package es.unex.dinopedia;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,8 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
-//import es.unex.dinopedia.database.DinosaurioCRUD;
+import java.util.List;
 
+//import es.unex.dinopedia.database.DinosaurioCRUD;
+import es.unex.dinopedia.roomdb.DinosaurioDatabase;
 
 public class LogroManagerActivity extends AppCompatActivity {
 

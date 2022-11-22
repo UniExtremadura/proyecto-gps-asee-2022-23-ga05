@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -25,6 +26,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
+import es.unex.dinopedia.roomdb.HistorialCombateDatabase;
+import es.unex.dinopedia.roomdb.LogroDatabase;
 import es.unex.dinopedia.roomdb.UsuarioDatabase;
 
 
@@ -40,6 +43,8 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
     private Button bFavorite;
     private Bundle bundle;
     private List<Dinosaurio> dinoList = new ArrayList<>();
+    private String body;
+    private boolean infoDino=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,30 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
         View v = this.findViewById(android.R.id.content);
 
         Switch swFavorito = findViewById(id.sFavorito);
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                Usuario u = UsuarioDatabase.getInstance(DinosaurioInfoActivity.this).getDao().getUsuario();
+                if(u!=null)
+                    infoDino=u.isInfoDino();
+            }
+        });
+
+        Button bt = findViewById(bCompartir);
+
+        bt.setOnClickListener(new View.OnClickListener () {
+
+            @Override
+            public void onClick(View v){
+                Intent myIntent = new Intent(Intent.ACTION_SEND);
+                myIntent.setType("text/plain");
+                body = "¡Mira que dinosaurio más interesante! -> https://acortar.link/RzE6K";
+                myIntent.putExtra(Intent.EXTRA_TEXT,body);
+                startActivity(Intent.createChooser(myIntent, "Share Using"));
+
+            }
+        });
 
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
@@ -71,6 +100,7 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
                     AppExecutors.getInstance().mainThread().execute(()->swFavorito.setChecked(true));
                 }
                 AppExecutors.getInstance().mainThread().execute(()->actualizarDinosaurio(d));
+                AppExecutors.getInstance().mainThread().execute(()->mostrarImagenes(d));
                 AppExecutors.getInstance().mainThread().execute(()->cambiarFavorito(d));
             }
         });
@@ -112,9 +142,60 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
                         d.setFavorite("0");
                         database.getDao().update(d);
                     }
+                    if(database.getDao().getFavorito().size()>=1) {
+                        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                LogroDatabase database2 = LogroDatabase.getInstance(DinosaurioInfoActivity.this);
+                                Logro l = database2.getDao().getLogro("Marca tu primer dinosaurio favorito");
+                                l.setChecked("1");
+                                database2.getDao().update(l);
+                            }
+                        });
+                    }
                 }
             });
             }
         });
+    }
+
+    public void mostrarImagenes(Dinosaurio d){
+        if(infoDino){
+            View v = this.findViewById(android.R.id.content);
+            if(d.getDiet()!=null) {
+                if (d.getDiet().equals("Carnivoro")) {
+                    ImageView iV = findViewById(iVCarnivoro);
+                    tDietaD.setVisibility(v.INVISIBLE);
+                    iV.setVisibility(v.VISIBLE);
+                }
+                if (d.getDiet().equals("Herbivoro")) {
+                    ImageView iV = findViewById(iVHerbivoro);
+                    tDietaD.setVisibility(v.INVISIBLE);
+                    iV.setVisibility(v.VISIBLE);
+                }
+                if (d.getDiet().equals("Omnivoro")) {
+                    ImageView iV = findViewById(iVOmnivoro);
+                    tDietaD.setVisibility(v.INVISIBLE);
+                    iV.setVisibility(v.VISIBLE);
+                }
+            }
+            if(d.getPeriodName()!=null) {
+                if (d.getPeriodName().equals("Jurasico")) {
+                    ImageView iV = findViewById(iVJurasico);
+                    tPeriodNameD.setVisibility(v.INVISIBLE);
+                    iV.setVisibility(v.VISIBLE);
+                }
+                if (d.getPeriodName().equals("Cretacico")) {
+                    ImageView iV = findViewById(iVCretacico);
+                    tPeriodNameD.setVisibility(v.INVISIBLE);
+                    iV.setVisibility(v.VISIBLE);
+                }
+                if (d.getPeriodName().equals("Triasico")) {
+                    ImageView iV = findViewById(iVTriasico);
+                    tPeriodNameD.setVisibility(v.INVISIBLE);
+                    iV.setVisibility(v.VISIBLE);
+                }
+            }
+        }
     }
 }
