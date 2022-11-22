@@ -11,18 +11,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DinosaurioAdapter extends RecyclerView.Adapter<DinosaurioAdapter.ViewHolder> {
-    private List<Dinosaurio> mItems = new ArrayList<Dinosaurio>();
+public class HistorialCombateAdapter extends RecyclerView.Adapter<HistorialCombateAdapter.ViewHolder> {
+    private List<HistorialCombate> mItems = new ArrayList<HistorialCombate>();
     Context mContext;
 
     public interface OnItemClickListener {
-        void onItemClick(Dinosaurio item);     //Type of the element to be returned
+        void onItemClick(HistorialCombate item);     //Type of the element to be returned
     }
 
     private final OnItemClickListener listener;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public DinosaurioAdapter(Context context, OnItemClickListener listener) {
+    public HistorialCombateAdapter(Context context, OnItemClickListener listener) {
         mContext = context;
         this.listener = listener;
     }
@@ -33,7 +33,7 @@ public class DinosaurioAdapter extends RecyclerView.Adapter<DinosaurioAdapter.Vi
                                                            int viewType) {
         // - Inflate the View for every element
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.dinosaurio_info, parent, false);
+                .inflate(R.layout.historial_combate_info, parent, false);
 
         return new ViewHolder(mContext,v);
     }
@@ -51,7 +51,7 @@ public class DinosaurioAdapter extends RecyclerView.Adapter<DinosaurioAdapter.Vi
         return mItems.size();
     }
 
-    public void add(Dinosaurio item) {
+    public void add(HistorialCombate item) {
 
         mItems.add(item);
         notifyDataSetChanged();
@@ -65,7 +65,7 @@ public class DinosaurioAdapter extends RecyclerView.Adapter<DinosaurioAdapter.Vi
 
     }
 
-    public void load(List<Dinosaurio> items){
+    public void load(List<HistorialCombate> items){
 
         mItems.clear();
         mItems = items;
@@ -93,18 +93,19 @@ public class DinosaurioAdapter extends RecyclerView.Adapter<DinosaurioAdapter.Vi
             nombre =  itemView.findViewById(R.id.tHistorial);
         }
 
-        public void bind(final Dinosaurio dinosaurio, final OnItemClickListener listener) {
+        public void bind(final HistorialCombate hC, final OnItemClickListener listener) {
 
             // - Display Nombre in TextView
-            nombre.setText(dinosaurio.getName());
+            nombre.setText(hC.getDinosaurio1()+ "-" + hC.getDinosaurio2() + "-" + hC.getEstado());
 
             itemView.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    listener.onItemClick(dinosaurio);
+                    listener.onItemClick(hC);
                 }
             });
         }
     }
+
 }

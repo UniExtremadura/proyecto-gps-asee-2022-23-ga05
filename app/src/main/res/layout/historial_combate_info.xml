@@ -13,7 +13,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="1dp"
-        android:text="Nombre del Dinosaurio"
+        android:text="Resultados Combate"
         android:textAppearance="?android:attr/textAppearanceLarge"></TextView>
 
 </RelativeLayout>
