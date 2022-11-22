@@ -22,7 +22,7 @@ import com.google.gson.Gson;
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
 import es.unex.dinopedia.roomdb.UsuarioDatabase;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements MainActivityInterface{
 
     es.unex.dinopedia.databinding.ActivityMainBinding binding;
     FragmentManager fragmentManager = getSupportFragmentManager();
@@ -116,6 +116,13 @@ public class MainActivity extends AppCompatActivity{
             }
             return true;
         });
+    }
+
+    @Override
+    public void classDinosaurio(Dinosaurio d) {
+        Intent intent = new Intent(MainActivity.this, DinosaurioInfoActivity.class);
+        intent.putExtra("id", d.getId());
+        startActivity(intent);
     }
 
     private void replaceFragment(Fragment fragment){

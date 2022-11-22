@@ -47,8 +47,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private View vista;
     private final Context context;
     ActivityMainBinding binding;
-    private boolean sesionIniciada;
     private DinosaurioAdapter mAdapter;
+    private boolean sesionIniciada;
 
 
     // TODO: Rename and change types of parameters
@@ -56,6 +56,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private String mParam2;
     private List<Dinosaurio> dinoList;
     private List<Dinosaurio> copiaDinosaurio;
+
 
 
     public MainFragment(Context cont, ActivityMainBinding bind) {
@@ -130,6 +131,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         return rootView;
     }
 
+
     @Override
     public void onClick(View v) {
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
@@ -147,6 +149,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             bIniciarSesion.setVisibility(vista.INVISIBLE);
         }
     }
+
 
     @Override
     public void onResume() {
@@ -183,3 +186,4 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         }
     }
 }
+
