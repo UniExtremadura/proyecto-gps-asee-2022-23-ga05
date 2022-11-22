@@ -8,8 +8,6 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.view.View;
-import android.widget.Button;
 
 import com.google.gson.Gson;
 
@@ -22,6 +20,8 @@ import java.util.List;
 
 import es.unex.dinopedia.databinding.ActivityMainBinding;
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
+import es.unex.dinopedia.roomdb.HistorialCombateDatabase;
+import es.unex.dinopedia.roomdb.LogroDatabase;
 
 public class MainActivity extends AppCompatActivity implements MainActivityInterface{
 
@@ -33,8 +33,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         }
     });
     List<Dinosaurio> dino = new ArrayList<>();
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,8 +42,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
             @Override
             public void run() {
                 //DinosaurioDatabase.getInstance(MainActivity.this).getDao().deleteAll();
+                LogroDatabase.getInstance(MainActivity.this).getDao().deleteAll();
+                HistorialCombateDatabase.getInstance(MainActivity.this).getDao().deleteAll();
 
-
+                quitarFavoritos();
                 if (DinosaurioDatabase.getInstance(MainActivity.this).getDao().count() == 0) {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.jurassicpark)));
                     String receiveString = "";
@@ -68,6 +68,28 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                         DinosaurioDatabase.getInstance(MainActivity.this).getDao().insert(d);
                     }
                 }
+                if (LogroDatabase.getInstance(MainActivity.this).getDao().count() == 0) {
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.logros)));
+                    String receiveString = "";
+                    StringBuilder stringBuilder = new StringBuilder();
+
+                    while (true) {
+                        try {
+                            if (!((receiveString = bufferedReader.readLine()) != null)) break;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        stringBuilder.append("\n").append(receiveString);
+                    }
+
+                    String read = stringBuilder.toString();
+
+                    List<Logro> logro = Arrays.asList(new Gson().fromJson(read, Logro[].class));
+                    for (int i = 0; i < logro.size(); i++) {
+                        Logro l = logro.get(i);
+                        LogroDatabase.getInstance(MainActivity.this).getDao().insert(l);
+                    }
+                }
             }
         });
 
@@ -82,6 +104,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
             }
         });
 
+        List<Logro> logro = new ArrayList<>();
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -90,6 +114,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
 
         EnciclopediaFragment eF = new EnciclopediaFragment(MainActivity.this);
         FavoritoFragment fF = new FavoritoFragment(MainActivity.this);
+        CombateFragment cF = new CombateFragment(MainActivity.this);
+        AlbumFragment aF = new AlbumFragment();
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
@@ -100,13 +126,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                     replaceFragment(eF);
                     break;
                 case R.id.batalla:
-                    replaceFragment(new CombateFragment(MainActivity.this));
+                    replaceFragment(cF);
                     break;
                 case R.id.favorito:
                     replaceFragment(fF);
                     break;
                 case R.id.logros:
-                    replaceFragment(new AlbumFragment());
+                    replaceFragment(aF);
                     break;
             }
             return true;
@@ -126,5 +152,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         Intent intent = new Intent(MainActivity.this, DinosaurioInfoActivity.class);
         intent.putExtra("id", d.getId());
         startActivity(intent);
+    }
+
+    public void quitarFavoritos(){
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                DinosaurioDatabase database = DinosaurioDatabase.getInstance(MainActivity.this);
+                database.getDao().quitarFavorite();
+            }
+        });
     }
 }
