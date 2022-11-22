@@ -3,23 +3,16 @@ package es.unex.dinopedia;
 import android.content.Context;
 import android.os.Bundle;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
-
-import com.google.android.material.snackbar.Snackbar;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,6 +120,33 @@ public class EnciclopediaFragment extends Fragment {
 
         // - Attach the adapter to the RecyclerView
         mRecyclerView.setAdapter(mAdapter);
+
+        opciones = viewMain.findViewById(R.id.sOpciones);
+        ArrayAdapter<CharSequence> adp = ArrayAdapter.createFromResource(context, R.array.opciones, android.R.layout.simple_spinner_item);
+        opciones.setAdapter(adp);
+
+        Button bAplicar = viewMain.findViewById(R.id.bAplicar);
+        bAplicar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        DinosaurioDatabase database = DinosaurioDatabase.getInstance(context);
+                        dinoOpciones=database.getDao().getOpciones(opciones.getSelectedItem().toString());
+                    }
+                });
+                aplicar=true;
+            }
+        });
+
+        Button bRestaurar = viewMain.findViewById(R.id.bRestaurar);
+        bRestaurar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                aplicar=false;
+            }
+        });
 
         return viewMain;
     }

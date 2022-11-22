@@ -17,9 +17,13 @@ public class Usuario {
     public static final String ITEM_SEP = System.getProperty("line.separator");
     @SerializedName("name")
     @Expose
-    @PrimaryKey
+    @PrimaryKey (autoGenerate=true)
+    private long id;
+
     @NonNull
     private String name;
+
+    private boolean modo;
 
     /**
      * No args constructor for use in serialization
@@ -32,9 +36,11 @@ public class Usuario {
     /**
      * @param name
      */
-    public Usuario(String name) {
+    public Usuario(long id, String name, boolean modo) {
         super();
+        this.id = id;
         this.name = name;
+        this.modo = modo;
     }
 
     public String getName() {
@@ -45,19 +51,41 @@ public class Usuario {
         this.name = name;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public boolean isModo() {
+        return modo;
+    }
+
+    public void setModo(boolean modo) {
+        this.modo = modo;
+    }
+
     @Override
-    public String toString() {
-        return "Dinosaurio{" +
-                ", name='" + name + '\'' +
-                '}';
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario = (Usuario) o;
+        return id == usuario.id && modo == usuario.modo && name.equals(usuario.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(id, name, modo);
     }
 
-    public String toLog() {
-        return "Name:" + name + ITEM_SEP;
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", modo=" + modo +
+                '}';
     }
 }
