@@ -1,17 +1,14 @@
 package es.unex.dinopedia;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Parcelable;
-import android.view.View;
-import android.widget.Button;
-
-import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,13 +16,15 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import es.unex.dinopedia.databinding.ActivityMainBinding;
+import com.google.gson.Gson;
+
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
+import es.unex.dinopedia.roomdb.UsuarioDatabase;
 
-public class MainActivity extends AppCompatActivity implements MainActivityInterface{
+public class MainActivity extends AppCompatActivity{
 
-    ActivityMainBinding binding;
+    es.unex.dinopedia.databinding.ActivityMainBinding binding;
     FragmentManager fragmentManager = getSupportFragmentManager();
     DinosaurioAdapter mAdapter = new DinosaurioAdapter(MainActivity.this, new DinosaurioAdapter.OnItemClickListener() {
         @Override public void onItemClick(Dinosaurio item) {
@@ -45,6 +44,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
             public void run() {
                 //DinosaurioDatabase.getInstance(MainActivity.this).getDao().deleteAll();
 
+                if(UsuarioDatabase.getInstance(MainActivity.this).getDao().getUsuario()!=null) {
+                    //UsuarioDatabase.getInstance(MainActivity.this).getDao().deleteAll();
+                    UsuarioDatabase database = UsuarioDatabase.getInstance(MainActivity.this);
+                    Usuario u = database.getDao().getUsuario();
+                    database.getDao().deleteUsuarioID(u.getId());
+                }
 
                 if (DinosaurioDatabase.getInstance(MainActivity.this).getDao().count() == 0) {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.jurassicpark)));
@@ -111,6 +116,44 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
             }
             return true;
         });
+            public void run() {
+                DinosaurioDatabase database = DinosaurioDatabase.getInstance(MainActivity.this);
+                dino = database.getDao().getAll();
+                if(dino.size()!=0){
+                    AppExecutors.getInstance().mainThread().execute(()->mAdapter.load(dino));
+                }
+            }
+        });
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        MainFragment mF = new MainFragment(MainActivity.this, binding);
+        replaceFragment(mF);
+
+        EnciclopediaFragment eF = new EnciclopediaFragment(MainActivity.this);
+        FavoritoFragment fF = new FavoritoFragment(MainActivity.this);
+
+        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+            switch (item.getItemId()){
+                case R.id.principal:
+                    replaceFragment(mF);
+                    break;
+                case R.id.enciclopedia:
+                    replaceFragment(eF);
+                    break;
+                case R.id.batalla:
+                    replaceFragment(new CombateFragment());
+                    break;
+                case R.id.favorito:
+                    replaceFragment(fF);
+                    break;
+                case R.id.logros:
+                    replaceFragment(new AlbumFragment());
+                    break;
+            }
+            return true;
+        });
 
 
     }
@@ -127,4 +170,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         intent.putExtra("id", d.getId());
         startActivity(intent);
     }
+
+    private void replaceFragment(Fragment fragment){
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameLayout, fragment);
+        fragmentTransaction.commit();
+    }
+
 }
