@@ -13,17 +13,6 @@ public class AyudaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ayuda);
-
-        Button bAtras = findViewById(R.id.bBack);
-
-        bAtras.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Snackbar.make(view, "Remplaza con una acción", Snackbar.LENGTH_LONG)
-                //       .setAction("Action", null).show();
-                finish();
-            }
-        });
     }
 
 

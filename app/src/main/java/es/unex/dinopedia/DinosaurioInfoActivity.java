@@ -25,8 +25,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
-import es.unex.dinopedia.roomdb.UsuarioDatabase;
-
 
 public class DinosaurioInfoActivity extends AppCompatActivity {
 
@@ -39,6 +37,7 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
     private TextView tLengthMetersD;
     private Button bFavorite;
     private Bundle bundle;
+    private String body;
     private List<Dinosaurio> dinoList = new ArrayList<>();
 
     @Override
@@ -48,30 +47,34 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
         bundle = getIntent().getExtras();
         View v = this.findViewById(android.R.id.content);
 
-        Switch swFavorito = findViewById(R.id.sFavorito);
+        Button bt = findViewById(bCompartir);
 
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+        bt.setOnClickListener(new View.OnClickListener () {
+
             @Override
-            public void run() {
-                UsuarioDatabase database = UsuarioDatabase.getInstance(DinosaurioInfoActivity.this);
-                if(database.getDao().getUsuario()!=null)
-                    swFavorito.setVisibility(v.VISIBLE);
+            public void onClick(View v) {
+                Intent myIntent = new Intent(Intent.ACTION_SEND);
+                myIntent.setType("text/plain");
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        DinosaurioDatabase database = DinosaurioDatabase.getInstance(DinosaurioInfoActivity.this);
+                        Dinosaurio d = database.getDao().getDinosaurioId(bundle.getLong("id"));
+                        AppExecutors.getInstance().mainThread().execute(() -> body = "¡Mira que dinosaurio más interesante! -> " + d.getName());
+                    }
+                });
+                myIntent.putExtra(Intent.EXTRA_TEXT, body);
+                startActivity(Intent.createChooser(myIntent, "Share Using"));
+
             }
         });
-
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
                 DinosaurioDatabase database = DinosaurioDatabase.getInstance(DinosaurioInfoActivity.this);
                 Dinosaurio d = database.getDao().getDinosaurioId(bundle.getLong("id"));
-                if(d.getFavorite().equals("0")){
-                    AppExecutors.getInstance().mainThread().execute(()->swFavorito.setChecked(false));
-                }
-                else{
-                    AppExecutors.getInstance().mainThread().execute(()->swFavorito.setChecked(true));
-                }
+
                 AppExecutors.getInstance().mainThread().execute(()->actualizarDinosaurio(d));
-                AppExecutors.getInstance().mainThread().execute(()->cambiarFavorito(d));
             }
         });
     }
@@ -92,29 +95,5 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
         tSpeciesD.setText(d.getSpecies());
         tPeriodNameD.setText(d.getPeriodName());
         tLengthMetersD.setText(d.getLengthMeters());
-    }
-
-    public void cambiarFavorito(Dinosaurio d){
-        DinosaurioDatabase database = DinosaurioDatabase.getInstance(DinosaurioInfoActivity.this);
-
-        Switch swFavorito = findViewById(R.id.sFavorito);
-
-        swFavorito.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                @Override
-                public void run() {
-                    if(swFavorito.isChecked()){
-                        d.setFavorite("1");
-                        database.getDao().update(d);
-                    }
-                    else{
-                        d.setFavorite("0");
-                        database.getDao().update(d);
-                    }
-                }
-            });
-            }
-        });
     }
 }

@@ -11,18 +11,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DinosaurioAdapter extends RecyclerView.Adapter<DinosaurioAdapter.ViewHolder> {
-    private List<Dinosaurio> mItems = new ArrayList<Dinosaurio>();
+public class LogroAdapter extends RecyclerView.Adapter<LogroAdapter.ViewHolder> {
+    private List<Logro> mItems = new ArrayList<Logro>();
     Context mContext;
 
     public interface OnItemClickListener {
-        void onItemClick(Dinosaurio item);     //Type of the element to be returned
+        void onItemClick(Logro item);     //Type of the element to be returned
     }
 
     private final OnItemClickListener listener;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public DinosaurioAdapter(Context context, OnItemClickListener listener) {
+    public LogroAdapter(Context context, OnItemClickListener listener) {
         mContext = context;
         this.listener = listener;
     }
@@ -33,7 +33,7 @@ public class DinosaurioAdapter extends RecyclerView.Adapter<DinosaurioAdapter.Vi
                                                            int viewType) {
         // - Inflate the View for every element
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.dinosaurio_info, parent, false);
+                .inflate(R.layout.logro_info, parent, false);
 
         return new ViewHolder(mContext,v);
     }
@@ -51,7 +51,7 @@ public class DinosaurioAdapter extends RecyclerView.Adapter<DinosaurioAdapter.Vi
         return mItems.size();
     }
 
-    public void add(Dinosaurio item) {
+    public void add(Logro item) {
 
         mItems.add(item);
         notifyDataSetChanged();
@@ -65,7 +65,7 @@ public class DinosaurioAdapter extends RecyclerView.Adapter<DinosaurioAdapter.Vi
 
     }
 
-    public void load(List<Dinosaurio> items){
+    public void load(List<Logro> items){
 
         mItems.clear();
         mItems = items;
@@ -90,21 +90,22 @@ public class DinosaurioAdapter extends RecyclerView.Adapter<DinosaurioAdapter.Vi
 
             // - Get the references to every widget of the Item View
 
-            nombre =  itemView.findViewById(R.id.nombreD);
+            nombre =  itemView.findViewById(R.id.tLogro);
         }
 
-        public void bind(final Dinosaurio dinosaurio, final OnItemClickListener listener) {
+        public void bind(final Logro logro, final OnItemClickListener listener) {
 
             // - Display Nombre in TextView
-            nombre.setText(dinosaurio.getName());
+            nombre.setText(logro.getName());
 
             itemView.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    listener.onItemClick(dinosaurio);
+                    listener.onItemClick(logro);
                 }
             });
         }
     }
+
 }
