@@ -53,7 +53,7 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
         bundle = getIntent().getExtras();
         View v = this.findViewById(android.R.id.content);
 
-        Switch swFavorito = findViewById(R.id.sFavorito);
+        Switch swFavorito = findViewById(id.sFavorito);
 
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
@@ -127,7 +127,7 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
     public void cambiarFavorito(Dinosaurio d){
         DinosaurioDatabase database = DinosaurioDatabase.getInstance(DinosaurioInfoActivity.this);
 
-        Switch swFavorito = findViewById(R.id.sFavorito);
+        Switch swFavorito = findViewById(id.sFavorito);
 
         swFavorito.setOnClickListener(new View.OnClickListener() {
             @Override
