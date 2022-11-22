@@ -21,7 +21,7 @@ import es.unex.dinopedia.roomdb.DinosaurioDatabase;
 
 public class DinosaurioManagerActivity extends AppCompatActivity {
 
-  // Add a ToDoItem Request Code
+    // Add a ToDoItem Request Code
     private static final int ADD_TODO_ITEM_REQUEST = 0;
 
     private static final String TAG = "Lab-UserInterface";
@@ -110,7 +110,7 @@ public class DinosaurioManagerActivity extends AppCompatActivity {
         // Load saved ToDoItems, if necessary
 
         //if (mAdapter.getItemCount() == 0)
-            //loadItems();
+        //loadItems();
     }
 
     @Override
@@ -120,15 +120,15 @@ public class DinosaurioManagerActivity extends AppCompatActivity {
         // ALTERNATIVE: Save all ToDoItems
 
     }
-/*
-    @Override
-    protected void onDestroy() {
-        DinosaurioCRUD crud = DinosaurioCRUD.getInstance(this);
-        DinosaurioDatabase.getInstance(this).close();
-        crud.close();
-        super.onDestroy();
-    }
-*/
+    /*
+        @Override
+        protected void onDestroy() {
+            DinosaurioCRUD crud = DinosaurioCRUD.getInstance(this);
+            DinosaurioDatabase.getInstance(this).close();
+            crud.close();
+            super.onDestroy();
+        }
+    */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -137,30 +137,30 @@ public class DinosaurioManagerActivity extends AppCompatActivity {
         menu.add(Menu.NONE, MENU_DUMP, Menu.NONE, "Dump to log");
         return true;
     }
-/*
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case MENU_DELETE:
-                DinosaurioCRUD crud = DinosaurioCRUD.getInstance(this);
-                crud.deleteAll();
-                AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        DinosaurioDatabase.getInstance(DinosaurioManagerActivity.this).getDao().deleteAll();
-                       runOnUiThread(() -> mAdapter.clear());
-                    }
-                });
+    /*
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            switch (item.getItemId()) {
+                case MENU_DELETE:
+                    DinosaurioCRUD crud = DinosaurioCRUD.getInstance(this);
+                    crud.deleteAll();
+                    AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            DinosaurioDatabase.getInstance(DinosaurioManagerActivity.this).getDao().deleteAll();
+                           runOnUiThread(() -> mAdapter.clear());
+                        }
+                    });
 
-                return true;
-            case MENU_DUMP:
-                dump();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+                    return true;
+                case MENU_DUMP:
+                    dump();
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
         }
-    }
-*/
+    */
     private void dump() {
 
         for (int i = 0; i < mAdapter.getItemCount(); i++) {
@@ -169,22 +169,22 @@ public class DinosaurioManagerActivity extends AppCompatActivity {
         }
 
     }
-/*
-    // Load stored Dinosaurios
-    private void loadItems() {
-        DinosaurioCRUD crud = DinosaurioCRUD.getInstance(this);
-        List<Dinosaurio> items = crud.getAll();
+    /*
+        // Load stored Dinosaurios
+        private void loadItems() {
+            DinosaurioCRUD crud = DinosaurioCRUD.getInstance(this);
+            List<Dinosaurio> items = crud.getAll();
 
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                List<Dinosaurio> items = DinosaurioDatabase.getInstance(DinosaurioManagerActivity.this).getDao().getAll();
-                runOnUiThread( () -> mAdapter.load(items));
-            }
-        });
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    List<Dinosaurio> items = DinosaurioDatabase.getInstance(DinosaurioManagerActivity.this).getDao().getAll();
+                    runOnUiThread( () -> mAdapter.load(items));
+                }
+            });
 
-    }
-*/
+        }
+    */
     private void log(String msg) {
         try {
             Thread.sleep(500);
