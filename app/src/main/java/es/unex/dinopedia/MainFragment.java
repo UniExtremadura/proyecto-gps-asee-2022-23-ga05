@@ -47,11 +47,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private View vista;
     private Context context;
     ActivityMainBinding binding;
-    private DinosaurioAdapter mAdapter;
-    private DateFormat formatoFecha;
-    private Date fecha;
     private boolean sesionIniciada;
-    private int dinosaurioDelDia;
+    private DinosaurioAdapter mAdapter;
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -70,17 +68,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 //Snackbar.make(view, "Item "+item.getName()+" Clicked", Snackbar.LENGTH_LONG).show();
             }
         });
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                DinosaurioDatabase database = DinosaurioDatabase.getInstance(context);
-                dinoList = database.getDao().getAll();
-                AppExecutors.getInstance().mainThread().execute(()->copiaDinosaurio=dinoList);
-            }
-        });
-        formatoFecha = new SimpleDateFormat("dd/MM/yy");
-        long momento = System.currentTimeMillis();
-        fecha = new Date(momento);
         binding = bind;
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
@@ -92,14 +79,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     sesionIniciada=false;
             }
         });
-        if(copiaDinosaurio!=null) {
-            if (copiaDinosaurio.size() != 0) {
-                Random random_method = new Random();
-                dinosaurioDelDia = random_method.nextInt(copiaDinosaurio.size());
-            } else {
-                dinosaurioDelDia = 0;
-            }
-        }
     }
 
     /**
@@ -170,35 +149,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    public void elegirDinosaurio(){
-        String nombre;
-        Random random_method = new Random();
-        if(copiaDinosaurio!=null) {
-            if (copiaDinosaurio.size() != 0) {
-                int nuevoDinosaurio = random_method.nextInt(copiaDinosaurio.size());
-                long momento = System.currentTimeMillis();
-                Date fechaActual = new Date(momento);
-                String fechaActualS = formatoFecha.format(fechaActual);
-                String fechaS = formatoFecha.format(fecha);
-                if (!fechaS.equals(fechaActualS)) {
-                    fecha = fechaActual;
-                    nuevoDinosaurio = random_method.nextInt(copiaDinosaurio.size());
-                    Log.d("fecha", fechaS);
-                    dinosaurioDelDia = nuevoDinosaurio;
-                }
-                Dinosaurio d = dinoList.get(dinosaurioDelDia);
-                Log.d("HOLA", d.getName());
-                nombre = d.getName();
-
-                if (dinoList.size() != 0) {
-                    final TextView dinoDia = (TextView) vista.findViewById(R.id.nombreDino);
-                    dinoDia.setText(nombre);
-                }
-            }
-        }
-    }
-
-    public void mostrarBotones(){
+     public void mostrarBotones(){
         binding.bottomNavigationView.getMenu().getItem(3).setVisible(sesionIniciada);
         binding.bottomNavigationView.getMenu().getItem(4).setVisible(sesionIniciada);
         Button bCuenta = vista.findViewById(R.id.bCuenta);
@@ -217,9 +168,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         mostrarBotones();
-        if(dinoList.size()!=0){
-            elegirDinosaurio();
-        }
     }
 
     @Override

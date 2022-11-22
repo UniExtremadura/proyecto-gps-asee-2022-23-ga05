@@ -63,10 +63,10 @@
         android:text="Modo Noche"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/eTUsuario"
+        app:layout_constraintHorizontal_bias="0.196"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/eTUsuario"
-        app:layout_constraintVertical_bias="0.072" />
+        app:layout_constraintVertical_bias="0.21" />
 
     <Button
         android:id="@+id/bCerrarSesion"
@@ -85,12 +85,13 @@
         android:id="@+id/bAyuda"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="168dp"
         android:text="Ayuda"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.173"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/swModo"
+        app:layout_constraintVertical_bias="0.139" />
 
     <Button
         android:id="@+id/bContactar"
@@ -102,18 +103,5 @@
         app:layout_constraintHorizontal_bias="0.211"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bAyuda"
-        app:layout_constraintVertical_bias="0.141" />
-
-    <Switch
-        android:id="@+id/sInfoDino"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:text="Informacion del dinosaurio simplificada"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/swModo"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.691" />
+        app:layout_constraintVertical_bias="0.103" />
 </androidx.constraintlayout.widget.ConstraintLayout>
