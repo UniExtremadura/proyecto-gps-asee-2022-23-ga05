@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -26,8 +25,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
-import es.unex.dinopedia.roomdb.UsuarioDatabase;
-
 
 public class DinosaurioInfoActivity extends AppCompatActivity {
 
@@ -38,9 +35,10 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
     private TextView tSpeciesD;
     private TextView tPeriodNameD;
     private TextView tLengthMetersD;
+    private Button bFavorite;
     private Bundle bundle;
+    private String body;
     private List<Dinosaurio> dinoList = new ArrayList<>();
-    private boolean infoDino=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,16 +47,27 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
         bundle = getIntent().getExtras();
         View v = this.findViewById(android.R.id.content);
 
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+        Button bt = findViewById(bCompartir);
+
+        bt.setOnClickListener(new View.OnClickListener () {
+
             @Override
-            public void run() {
-                Usuario u = UsuarioDatabase.getInstance(DinosaurioInfoActivity.this).getDao().getUsuario();
-                if(u!=null)
-                    infoDino=u.isInfoDino();
+            public void onClick(View v) {
+                Intent myIntent = new Intent(Intent.ACTION_SEND);
+                myIntent.setType("text/plain");
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        DinosaurioDatabase database = DinosaurioDatabase.getInstance(DinosaurioInfoActivity.this);
+                        Dinosaurio d = database.getDao().getDinosaurioId(bundle.getLong("id"));
+                        AppExecutors.getInstance().mainThread().execute(() -> body = "¡Mira que dinosaurio más interesante! -> " + d.getName());
+                    }
+                });
+                myIntent.putExtra(Intent.EXTRA_TEXT, body);
+                startActivity(Intent.createChooser(myIntent, "Share Using"));
+
             }
         });
-
-
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -66,7 +75,6 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
                 Dinosaurio d = database.getDao().getDinosaurioId(bundle.getLong("id"));
 
                 AppExecutors.getInstance().mainThread().execute(()->actualizarDinosaurio(d));
-                AppExecutors.getInstance().mainThread().execute(()->mostrarImagenes(d));
             }
         });
     }
@@ -87,45 +95,5 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
         tSpeciesD.setText(d.getSpecies());
         tPeriodNameD.setText(d.getPeriodName());
         tLengthMetersD.setText(d.getLengthMeters());
-    }
-
-    public void mostrarImagenes(Dinosaurio d){
-        if(infoDino){
-            View v = this.findViewById(android.R.id.content);
-            if(d.getDiet()!=null) {
-                if (d.getDiet().equals("Carnivoro")) {
-                    ImageView iV = findViewById(iVCarnivoro);
-                    tDietaD.setVisibility(v.INVISIBLE);
-                    iV.setVisibility(v.VISIBLE);
-                }
-                if (d.getDiet().equals("Herbivoro")) {
-                    ImageView iV = findViewById(iVHerbivoro);
-                    tDietaD.setVisibility(v.INVISIBLE);
-                    iV.setVisibility(v.VISIBLE);
-                }
-                if (d.getDiet().equals("Omnivoro")) {
-                    ImageView iV = findViewById(iVOmnivoro);
-                    tDietaD.setVisibility(v.INVISIBLE);
-                    iV.setVisibility(v.VISIBLE);
-                }
-            }
-            if(d.getPeriodName()!=null) {
-                if (d.getPeriodName().equals("Jurasico")) {
-                    ImageView iV = findViewById(iVJurasico);
-                    tPeriodNameD.setVisibility(v.INVISIBLE);
-                    iV.setVisibility(v.VISIBLE);
-                }
-                if (d.getPeriodName().equals("Cretacico")) {
-                    ImageView iV = findViewById(iVCretacico);
-                    tPeriodNameD.setVisibility(v.INVISIBLE);
-                    iV.setVisibility(v.VISIBLE);
-                }
-                if (d.getPeriodName().equals("Triasico")) {
-                    ImageView iV = findViewById(iVTriasico);
-                    tPeriodNameD.setVisibility(v.INVISIBLE);
-                    iV.setVisibility(v.VISIBLE);
-                }
-            }
-        }
     }
 }

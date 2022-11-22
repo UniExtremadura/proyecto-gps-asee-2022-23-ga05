@@ -18,6 +18,9 @@ public interface DinosaurioDao {
     @Query("SELECT * FROM Dinosaurio WHERE id=:ID")
     Dinosaurio getDinosaurioId(long ID);
 
+    @Query("SELECT * FROM Dinosaurio WHERE diet=:opcion OR periodName=:opcion")
+    List<Dinosaurio> getOpciones(String opcion);
+
     @Insert
     long insert(Dinosaurio item);
 
