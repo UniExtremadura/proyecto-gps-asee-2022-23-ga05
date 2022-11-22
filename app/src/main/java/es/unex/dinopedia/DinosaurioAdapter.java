@@ -30,7 +30,7 @@ public class DinosaurioAdapter extends RecyclerView.Adapter<DinosaurioAdapter.Vi
     // Create new views (invoked by the layout manager)
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                           int viewType) {
+                                         int viewType) {
         // - Inflate the View for every element
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.dinosaurio_info, parent, false);
@@ -77,9 +77,9 @@ public class DinosaurioAdapter extends RecyclerView.Adapter<DinosaurioAdapter.Vi
         return mItems.get(pos);
     }
 
-     static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
-         private final Context mContext;
+        private final Context mContext;
 
         private final TextView nombre;
 
@@ -107,4 +107,5 @@ public class DinosaurioAdapter extends RecyclerView.Adapter<DinosaurioAdapter.Vi
             });
         }
     }
+
 }

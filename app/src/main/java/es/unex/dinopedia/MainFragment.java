@@ -1,36 +1,21 @@
 package es.unex.dinopedia;
 
-import static android.app.Activity.RESULT_OK;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentResultListener;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
-import org.json.JSONArray;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import es.unex.dinopedia.databinding.ActivityMainBinding;
-import es.unex.dinopedia.roomdb.DinosaurioDatabase;
 import es.unex.dinopedia.roomdb.UsuarioDatabase;
 
 /**
@@ -45,7 +30,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private View vista;
-    private final Context context;
+    private Context context;
     ActivityMainBinding binding;
     private DinosaurioAdapter mAdapter;
     private boolean sesionIniciada;
@@ -57,6 +42,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private List<Dinosaurio> dinoList;
     private List<Dinosaurio> copiaDinosaurio;
 
+    public MainFragment(){
+    }
 
 
     public MainFragment(Context cont, ActivityMainBinding bind) {
@@ -139,7 +126,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    public void mostrarBotones(){
+     public void mostrarBotones(){
         binding.bottomNavigationView.getMenu().getItem(3).setVisible(sesionIniciada);
         binding.bottomNavigationView.getMenu().getItem(4).setVisible(sesionIniciada);
         Button bCuenta = vista.findViewById(R.id.bCuenta);
@@ -147,6 +134,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         if(sesionIniciada==true) {
             bCuenta.setVisibility(vista.VISIBLE);
             bIniciarSesion.setVisibility(vista.INVISIBLE);
+        }
+        else{
+            bCuenta.setVisibility(vista.INVISIBLE);
+            bIniciarSesion.setVisibility(vista.VISIBLE);
         }
     }
 
