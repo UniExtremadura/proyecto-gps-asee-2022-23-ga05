@@ -1,14 +1,14 @@
 package es.unex.dinopedia;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.content.Intent;
-import android.os.Bundle;
-
-import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,13 +16,15 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import es.unex.dinopedia.databinding.ActivityMainBinding;
+import com.google.gson.Gson;
+
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
+import es.unex.dinopedia.roomdb.UsuarioDatabase;
 
-public class MainActivity extends AppCompatActivity implements MainActivityInterface{
+public class MainActivity extends AppCompatActivity{
 
-    ActivityMainBinding binding;
+    es.unex.dinopedia.databinding.ActivityMainBinding binding;
     FragmentManager fragmentManager = getSupportFragmentManager();
     DinosaurioAdapter mAdapter = new DinosaurioAdapter(MainActivity.this, new DinosaurioAdapter.OnItemClickListener() {
         @Override public void onItemClick(Dinosaurio item) {
@@ -30,17 +32,25 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         }
     });
     List<Dinosaurio> dino = new ArrayList<>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_main);
 
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                DinosaurioDatabase.getInstance(MainActivity.this).getDao().deleteAll();
+                //DinosaurioDatabase.getInstance(MainActivity.this).getDao().deleteAll();
 
-                quitarFavoritos();
+                if(UsuarioDatabase.getInstance(MainActivity.this).getDao().getUsuario()!=null) {
+                    //UsuarioDatabase.getInstance(MainActivity.this).getDao().deleteAll();
+                    UsuarioDatabase database = UsuarioDatabase.getInstance(MainActivity.this);
+                    Usuario u = database.getDao().getUsuario();
+                    database.getDao().deleteUsuarioID(u.getId());
+                }
+
                 if (DinosaurioDatabase.getInstance(MainActivity.this).getDao().count() == 0) {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.jurassicpark)));
                     String receiveString = "";
@@ -63,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                         DinosaurioDatabase.getInstance(MainActivity.this).getDao().insert(d);
                     }
                 }
-
             }
         });
 
@@ -96,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                     replaceFragment(eF);
                     break;
                 case R.id.batalla:
-                    replaceFragment(new CombateFragment(MainActivity.this));
+                    replaceFragment(new CombateFragment());
                     break;
                 case R.id.favorito:
                     replaceFragment(fF);
@@ -107,8 +116,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
             }
             return true;
         });
-
-
     }
 
     private void replaceFragment(Fragment fragment){
@@ -117,20 +124,4 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         fragmentTransaction.commit();
     }
 
-    @Override
-    public void classDinosaurio(Dinosaurio d) {
-        Intent intent = new Intent(MainActivity.this, DinosaurioInfoActivity.class);
-        intent.putExtra("id", d.getId());
-        startActivity(intent);
-    }
-
-    public void quitarFavoritos(){
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                DinosaurioDatabase database = DinosaurioDatabase.getInstance(MainActivity.this);
-                database.getDao().quitarFavorite();
-            }
-        });
-    }
 }
