@@ -92,32 +92,6 @@
         app:layout_constraintHorizontal_bias="0.173"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Switch
-        android:id="@+id/swModo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:text="Modo Noche"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/eTUsuario"
-        app:layout_constraintTop_toBottomOf="@+id/eTUsuario"
-        app:layout_constraintVertical_bias="0.072" />
-
-    <Switch
-        android:id="@+id/sInfoDino"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minHeight="48dp"
-        android:text="Informacion del dinosaurio simplificada"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/swModo"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.691" />
-
     <Button
         android:id="@+id/bContactar"
         android:layout_width="wrap_content"
