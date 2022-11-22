@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
+import es.unex.dinopedia.roomdb.UsuarioDatabase;
 
 
 public class DinosaurioInfoActivity extends AppCompatActivity {
@@ -47,12 +48,14 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
         bundle = getIntent().getExtras();
         View v = this.findViewById(android.R.id.content);
 
-        Switch swFavorito = findViewById(R.id.sFavorito);
+        Switch swFavorito = findViewById(id.sFavorito);
 
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-
+                UsuarioDatabase database = UsuarioDatabase.getInstance(DinosaurioInfoActivity.this);
+                if(database.getDao().getUsuario()!=null)
+                    swFavorito.setVisibility(v.VISIBLE);
             }
         });
 
@@ -94,7 +97,7 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
     public void cambiarFavorito(Dinosaurio d){
         DinosaurioDatabase database = DinosaurioDatabase.getInstance(DinosaurioInfoActivity.this);
 
-        Switch swFavorito = findViewById(R.id.sFavorito);
+        Switch swFavorito = findViewById(id.sFavorito);
 
         swFavorito.setOnClickListener(new View.OnClickListener() {
             @Override
