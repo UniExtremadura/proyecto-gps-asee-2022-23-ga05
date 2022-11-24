@@ -44,12 +44,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                 //DinosaurioDatabase.getInstance(MainActivity.this).getDao().deleteAll();
                 LogroDatabase.getInstance(MainActivity.this).getDao().deleteAll();
                 HistorialCombateDatabase.getInstance(MainActivity.this).getDao().deleteAll();
-                /*if(UsuarioDatabase.getInstance(MainActivity.this).getDao().getUsuario()!=null) {
-                    //UsuarioDatabase.getInstance(MainActivity.this).getDao().deleteAll();
-                    UsuarioDatabase database = UsuarioDatabase.getInstance(MainActivity.this);
-                    Usuario u = database.getDao().getUsuario();
-                    //database.getDao().deleteUsuarioID(u.getId());
-                }*/
+
                 quitarFavoritos();
                 if (DinosaurioDatabase.getInstance(MainActivity.this).getDao().count() == 0) {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.jurassicpark)));
