@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
+import es.unex.dinopedia.roomdb.HistorialCombateDatabase;
 
 public class CombateFragment extends Fragment {
 
@@ -93,6 +94,15 @@ public class CombateFragment extends Fragment {
             }
         });
 
+        Button bHistorial = viewMain.findViewById(R.id.bHistorial);
+        bHistorial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, HistorialCombateActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return viewMain;
     }
 
@@ -112,7 +122,9 @@ public class CombateFragment extends Fragment {
                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
                     @Override
                     public void run() {
-
+                        HistorialCombateDatabase database = HistorialCombateDatabase.getInstance(context);
+                        HistorialCombate hC = new HistorialCombate(dinosaurio1.getName(), dinosaurio2.getName(), "Gana dino2");
+                        database.getDao().insert(hC);
                     }
                 });
             }
@@ -121,7 +133,9 @@ public class CombateFragment extends Fragment {
                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
                     @Override
                     public void run() {
-
+                        HistorialCombateDatabase database = HistorialCombateDatabase.getInstance(context);
+                        HistorialCombate hC = new HistorialCombate(dinosaurio1.getName(), dinosaurio2.getName(), "Gana dino1");
+                        database.getDao().insert(hC);
                     }
                 });
             }
@@ -131,7 +145,9 @@ public class CombateFragment extends Fragment {
                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
                     @Override
                     public void run() {
-
+                        HistorialCombateDatabase database = HistorialCombateDatabase.getInstance(context);
+                        HistorialCombate hC = new HistorialCombate(dinosaurio1.getName(), dinosaurio2.getName(), "Empate");
+                        database.getDao().insert(hC);
                     }
                 });
             }
