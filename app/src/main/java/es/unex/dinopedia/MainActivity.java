@@ -1,11 +1,22 @@
 package es.unex.dinopedia;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
+import es.unex.dinopedia.databinding.ActivityMainBinding;
+
+
 import com.google.gson.Gson;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,11 +27,17 @@ import es.unex.dinopedia.databinding.ActivityMainBinding;
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
 import es.unex.dinopedia.roomdb.LogroDatabase;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
     FragmentManager fragmentManager = getSupportFragmentManager();
-    DinosaurioAdapter mAdapter = new DinosaurioAdapter(MainActivity.this, item -> {});
+    List<Dinosaurio> dino = new ArrayList<>();
+
+    DinosaurioAdapter mAdapter = new DinosaurioAdapter(MainActivity.this, new DinosaurioAdapter.OnItemClickListener() {
+        @Override public void onItemClick(Dinosaurio item) {
+            //Snackbar.make(view, "Item "+item.getName()+" Clicked", Snackbar.LENGTH_LONG).show();
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +54,7 @@ public class MainActivity extends AppCompatActivity{
 
         EnciclopediaFragment eF = new EnciclopediaFragment();
         FavoritoFragment fF = new FavoritoFragment();
-        CombateFragment cF = new CombateFragment();
+        CombateFragment cF = new CombateFragment(MainActivity.this);
         AlbumFragment aF = new AlbumFragment();
 
         DinosaurioAdapter mAdapter = new DinosaurioAdapter(MainActivity.this, new DinosaurioAdapter.OnItemClickListener() {
@@ -47,7 +64,17 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-        final List<Dinosaurio>[] dino = new List[]{new ArrayList<>()};
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                DinosaurioDatabase database = DinosaurioDatabase.getInstance(MainActivity.this);
+                dino = database.getDao().getAll();
+                if(dino.size()!=0){
+                    AppExecutors.getInstance().mainThread().execute(()->mAdapter.load(dino));
+                }
+            }
+        });
 
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
@@ -77,6 +104,7 @@ public class MainActivity extends AppCompatActivity{
                         LogroDatabase.getInstance(MainActivity.this).getDao().insert(l);
                     }
                 }
+
                 List<Logro> logro = new ArrayList<>();
 
                 if (DinosaurioDatabase.getInstance(MainActivity.this).getDao().count() == 0) {
@@ -102,18 +130,17 @@ public class MainActivity extends AppCompatActivity{
                     }
                 }
 
-                AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        DinosaurioDatabase database = DinosaurioDatabase.getInstance(MainActivity.this);
-                        dino[0] = database.getDao().getAll();
-                        if (dino[0].size() != 0) {
-                            AppExecutors.getInstance().mainThread().execute(() -> mAdapter.load(dino[0]));
-                        }
-                    }
-                });
+            }
+        });
 
-
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                DinosaurioDatabase database = DinosaurioDatabase.getInstance(MainActivity.this);
+                dino = database.getDao().getAll();
+                if (dino.size() != 0) {
+                    AppExecutors.getInstance().mainThread().execute(() -> mAdapter.load(dino));
+                }
             }
         });
 
