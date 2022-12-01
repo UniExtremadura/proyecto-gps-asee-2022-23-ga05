@@ -23,7 +23,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+import es.unex.dinopedia.databinding.ActivityMainBinding;
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
 import es.unex.dinopedia.roomdb.LogroDatabase;
 
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        MainFragment mF = new MainFragment(this,binding);
+        MainFragment mF = new MainFragment(MainActivity.this, binding);
         replaceFragment(mF);
 
         EnciclopediaFragment eF = new EnciclopediaFragment();
