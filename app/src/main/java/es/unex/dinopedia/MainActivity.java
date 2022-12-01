@@ -1,29 +1,18 @@
 package es.unex.dinopedia;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
-import es.unex.dinopedia.databinding.ActivityMainBinding;
-
-
 import com.google.gson.Gson;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+import es.unex.dinopedia.databinding.ActivityMainBinding;
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
 import es.unex.dinopedia.roomdb.LogroDatabase;
 
@@ -31,6 +20,7 @@ public class MainActivity extends AppCompatActivity{
 
     ActivityMainBinding binding;
     FragmentManager fragmentManager = getSupportFragmentManager();
+    DinosaurioAdapter mAdapter = new DinosaurioAdapter(MainActivity.this, item -> {});
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +32,7 @@ public class MainActivity extends AppCompatActivity{
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        MainFragment mF = new MainFragment();
+        MainFragment mF = new MainFragment(MainActivity.this, binding);
         replaceFragment(mF);
 
         EnciclopediaFragment eF = new EnciclopediaFragment();
@@ -156,5 +146,5 @@ public class MainActivity extends AppCompatActivity{
         fragmentTransaction.replace(R.id.frameLayout, fragment);
         fragmentTransaction.commit();
     }
-    }
+
 }
