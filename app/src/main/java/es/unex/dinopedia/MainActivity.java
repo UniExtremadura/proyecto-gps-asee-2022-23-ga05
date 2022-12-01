@@ -27,7 +27,7 @@ import java.util.List;
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
 import es.unex.dinopedia.roomdb.LogroDatabase;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
     FragmentManager fragmentManager = getSupportFragmentManager();
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity{
 
         EnciclopediaFragment eF = new EnciclopediaFragment();
         FavoritoFragment fF = new FavoritoFragment();
-        CombateFragment cF = new CombateFragment();
+        CombateFragment cF = new CombateFragment(MainActivity.this);
         AlbumFragment aF = new AlbumFragment();
 
         DinosaurioAdapter mAdapter = new DinosaurioAdapter(MainActivity.this, new DinosaurioAdapter.OnItemClickListener() {
@@ -156,5 +156,5 @@ public class MainActivity extends AppCompatActivity{
         fragmentTransaction.replace(R.id.frameLayout, fragment);
         fragmentTransaction.commit();
     }
-    }
+
 }
