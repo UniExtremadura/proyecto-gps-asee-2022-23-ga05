@@ -23,7 +23,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+import es.unex.dinopedia.databinding.ActivityMainBinding;
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
 import es.unex.dinopedia.roomdb.LogroDatabase;
 
@@ -31,6 +31,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
 
     ActivityMainBinding binding;
     FragmentManager fragmentManager = getSupportFragmentManager();
+    List<Dinosaurio> dino = new ArrayList<>();
+
+    DinosaurioAdapter mAdapter = new DinosaurioAdapter(MainActivity.this, new DinosaurioAdapter.OnItemClickListener() {
+        @Override public void onItemClick(Dinosaurio item) {
+            //Snackbar.make(view, "Item "+item.getName()+" Clicked", Snackbar.LENGTH_LONG).show();
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +49,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        MainFragment mF = new MainFragment();
+        MainFragment mF = new MainFragment(MainActivity.this, binding);
         replaceFragment(mF);
 
         EnciclopediaFragment eF = new EnciclopediaFragment(MainActivity.this);
         FavoritoFragment fF = new FavoritoFragment();
-        CombateFragment cF = new CombateFragment();
+        CombateFragment cF = new CombateFragment(MainActivity.this);
         AlbumFragment aF = new AlbumFragment();
 
         DinosaurioAdapter mAdapter = new DinosaurioAdapter(MainActivity.this, new DinosaurioAdapter.OnItemClickListener() {
@@ -57,7 +64,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
             }
         });
 
-        final List<Dinosaurio>[] dino = new List[]{new ArrayList<>()};
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                DinosaurioDatabase database = DinosaurioDatabase.getInstance(MainActivity.this);
+                dino = database.getDao().getAll();
+                if(dino.size()!=0){
+                    AppExecutors.getInstance().mainThread().execute(()->mAdapter.load(dino));
+                }
+            }
+        });
 
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
@@ -87,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                         LogroDatabase.getInstance(MainActivity.this).getDao().insert(l);
                     }
                 }
+
                 List<Logro> logro = new ArrayList<>();
 
                 if (DinosaurioDatabase.getInstance(MainActivity.this).getDao().count() == 0) {
@@ -112,18 +130,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
                     }
                 }
 
-                AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        DinosaurioDatabase database = DinosaurioDatabase.getInstance(MainActivity.this);
-                        dino[0] = database.getDao().getAll();
-                        if (dino[0].size() != 0) {
-                            AppExecutors.getInstance().mainThread().execute(() -> mAdapter.load(dino[0]));
-                        }
-                    }
-                });
+            }
+        });
 
-
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                DinosaurioDatabase database = DinosaurioDatabase.getInstance(MainActivity.this);
+                dino = database.getDao().getAll();
+                if (dino.size() != 0) {
+                    AppExecutors.getInstance().mainThread().execute(() -> mAdapter.load(dino));
+                }
             }
         });
 
