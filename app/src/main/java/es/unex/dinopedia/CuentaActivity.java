@@ -20,12 +20,32 @@ public class CuentaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cuenta);
+        Button bAyuda = findViewById(R.id.bAyuda);
+        Button bContacto = findViewById(R.id.bContactar);
         Button bCambiar = findViewById(R.id.bCambiar);
         Button bCerrarSesion = findViewById(R.id.bCerrarSesion);
         EditText eNUsuario = findViewById(R.id.eTUsuario);
 
+        Switch swModo = findViewById(R.id.swModo);
+
         usuario = getIntent().getStringExtra("USUARIO");
         eNUsuario.setText(usuario);
+
+        bAyuda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CuentaActivity.this, AyudaActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        bContacto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CuentaActivity.this, ContactoActivity.class);
+                startActivity(intent);
+            }
+        });
 
         bCambiar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,10 +74,6 @@ public class CuentaActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
-        Switch swModo = findViewById(R.id.swModo);
-
 
         swModo.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -55,26 +55,54 @@
         app:layout_constraintTop_toBottomOf="@+id/tUsuario"
         app:layout_constraintVertical_bias="0.045" />
 
-    <Button
-        android:id="@+id/bCerrarSesion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="220dp"
-        android:layout_marginBottom="36dp"
-        android:text="Cerrar Sesion"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
     <Switch
         android:id="@+id/swModo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="228dp"
-        android:layout_marginBottom="312dp"
         android:minHeight="48dp"
         android:text="Modo Noche"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"/>
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/eTUsuario"
+        app:layout_constraintTop_toBottomOf="@+id/eTUsuario"
+        app:layout_constraintVertical_bias="0.072" />
+
+    <Button
+        android:id="@+id/bCerrarSesion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="Cerrar Sesion"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/bContactar"
+        app:layout_constraintTop_toBottomOf="@+id/bContactar"
+        app:layout_constraintVertical_bias="0.75" />
+
+    <Button
+        android:id="@+id/bAyuda"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ayuda"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/eTUsuario"
+        app:layout_constraintTop_toBottomOf="@+id/swModo"
+        app:layout_constraintVertical_bias="0.255" />
+
+    <Button
+        android:id="@+id/bContactar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Contactanos"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/bAyuda"
+        app:layout_constraintTop_toBottomOf="@+id/bAyuda"
+        app:layout_constraintVertical_bias="0.111" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
