@@ -14,11 +14,47 @@ import es.unex.dinopedia.roomdb.UsuarioDatabase;
 
 public class CuentaActivity extends AppCompatActivity {
 
+    private String usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cuenta);
+        Button bCambiar = findViewById(R.id.bCambiar);
+        Button bCerrarSesion = findViewById(R.id.bCerrarSesion);
+        EditText eNUsuario = findViewById(R.id.eTUsuario);
+
+        usuario = getIntent().getStringExtra("USUARIO");
+        eNUsuario.setText(usuario);
+
+        bCambiar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        int i = 0;
+                        UsuarioDatabase database = UsuarioDatabase.getInstance(CuentaActivity.this);
+                        Usuario u = new Usuario(database.getDao().getUsuario().getId(), eNUsuario.getText().toString(), database.getDao().getUsuario().isModo());
+                        database.getDao().update(u);
+                    }
+                });
+            }
+        });
+        bCerrarSesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        UsuarioDatabase database = UsuarioDatabase.getInstance(CuentaActivity.this);
+                        database.getDao().deleteAll();
+                    }
+                });
+                finish();
+            }
+        });
+
 
         Switch swModo = findViewById(R.id.swModo);
 
