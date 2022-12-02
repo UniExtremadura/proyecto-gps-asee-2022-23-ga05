@@ -35,7 +35,7 @@ public class CuentaActivity extends AppCompatActivity {
                     public void run() {
                         int i = 0;
                         UsuarioDatabase database = UsuarioDatabase.getInstance(CuentaActivity.this);
-                        Usuario u = new Usuario(database.getDao().getUsuario().getId(), eNUsuario.getText().toString());
+                        Usuario u = new Usuario(database.getDao().getUsuario().getId(), eNUsuario.getText().toString(), database.getDao().getUsuario().isModo());
                         database.getDao().update(u);
                     }
                 });
@@ -55,10 +55,61 @@ public class CuentaActivity extends AppCompatActivity {
             }
         });
 
+
+        Switch swModo = findViewById(R.id.swModo);
+
+
+        swModo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        Usuario aux = UsuarioDatabase.getInstance(CuentaActivity.this).getDao().getUsuario();
+                        if (aux.isModo() == false) {
+                            UsuarioDatabase.getInstance(CuentaActivity.this).getDao().updateModoUsuario(aux.getId(), true);
+                        } else {
+                            UsuarioDatabase.getInstance(CuentaActivity.this).getDao().updateModoUsuario(aux.getId(), false);
+                        }
+                    }
+                });
+                if (swModo.isChecked()) {
+                    CuentaActivity.this.setDayNight(0);
+                } else {
+                    CuentaActivity.this.setDayNight(1);
+                }
+            }
+        });
+    }
+
+    public void setDayNight (int modo){
+        if (modo == 0){
+            getDelegate().setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+        else{
+            getDelegate().setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
+
+    public void cambiarSwitch(){
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                Switch swModo = findViewById(R.id.swModo);
+                Usuario u = UsuarioDatabase.getInstance(CuentaActivity.this).getDao().getUsuario();
+                if(u.isModo()){
+                    AppExecutors.getInstance().mainThread().execute(()->swModo.setChecked(true));
+                }
+                else{
+                    AppExecutors.getInstance().mainThread().execute(()->swModo.setChecked(false));
+                }
+            }
+        });
     }
 
     @Override
     public void onResume(){
         super.onResume();
+        cambiarSwitch();
     }
 }

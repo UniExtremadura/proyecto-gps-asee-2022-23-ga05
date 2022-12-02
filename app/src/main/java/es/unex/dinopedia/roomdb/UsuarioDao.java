@@ -29,4 +29,7 @@ public interface UsuarioDao {
 
     @Update
     int update(Usuario item);
+
+    @Query("UPDATE Usuario SET modo =:MODO WHERE id=:ID")
+    void updateModoUsuario(long ID, boolean MODO);
 }
