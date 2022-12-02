@@ -12,7 +12,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DinoPedia"
         tools:targetApi="31">
-
+        <activity
+            android:name=".ContactoActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".AyudaActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".HistorialCombateManagerActivity"
             android:exported="true">
