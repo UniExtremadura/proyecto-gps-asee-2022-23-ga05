@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
+import es.unex.dinopedia.roomdb.LogroDatabase;
 import es.unex.dinopedia.roomdb.UsuarioDatabase;
 
 public class DinosaurioInfoActivity extends AppCompatActivity {
@@ -135,6 +136,17 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
                     else{
                         d.setFavorite("0");
                         database.getDao().update(d);
+                    }
+                    if(database.getDao().getFavorito().size()>=1) {
+                        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                LogroDatabase database2 = LogroDatabase.getInstance(DinosaurioInfoActivity.this);
+                                Logro l = database2.getDao().getLogro("Marca tu primer dinosaurio favorito");
+                                l.setChecked("1");
+                                database2.getDao().update(l);
+                            }
+                        });
                     }
                 }
             });

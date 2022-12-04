@@ -23,6 +23,11 @@ public class IniciarSesionActivity extends AppCompatActivity {
                 Usuario u = new Usuario();
                 u.setName(eDName.getText().toString());
                 database.getDao().insert(u);
+
+                LogroDatabase database2 = LogroDatabase.getInstance(IniciarSesionActivity.this);
+                Logro l = database2.getDao().getLogro("Inicia Sesión en la aplicación");
+                l.setChecked("1");
+                database2.getDao().update(l);
             });
             finish();
         });
