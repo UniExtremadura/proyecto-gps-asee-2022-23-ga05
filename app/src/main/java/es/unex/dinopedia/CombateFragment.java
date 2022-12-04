@@ -19,18 +19,10 @@ import java.util.List;
 
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
 import es.unex.dinopedia.roomdb.HistorialCombateDatabase;
+import es.unex.dinopedia.roomdb.LogroDatabase;
 
 public class CombateFragment extends Fragment {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
-
-    private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private static DinosaurioAdapter mAdapter;
     private Spinner mSpinnerdino1;
     private Spinner mSpinnerdino2;
     private List<String> dinoListNombres = new ArrayList<>();
@@ -125,6 +117,9 @@ public class CombateFragment extends Fragment {
                         HistorialCombateDatabase database = HistorialCombateDatabase.getInstance(context);
                         HistorialCombate hC = new HistorialCombate(dinosaurio1.getName(), dinosaurio2.getName(), "Gana dino2");
                         database.getDao().insert(hC);
+
+                        modificarLogroPrimerCombate();
+                        cambiarLogro(dinosaurio2);
                     }
                 });
             }
@@ -136,6 +131,9 @@ public class CombateFragment extends Fragment {
                         HistorialCombateDatabase database = HistorialCombateDatabase.getInstance(context);
                         HistorialCombate hC = new HistorialCombate(dinosaurio1.getName(), dinosaurio2.getName(), "Gana dino1");
                         database.getDao().insert(hC);
+
+                        modificarLogroPrimerCombate();
+                        cambiarLogro(dinosaurio1);
                     }
                 });
             }
@@ -148,6 +146,10 @@ public class CombateFragment extends Fragment {
                         HistorialCombateDatabase database = HistorialCombateDatabase.getInstance(context);
                         HistorialCombate hC = new HistorialCombate(dinosaurio1.getName(), dinosaurio2.getName(), "Empate");
                         database.getDao().insert(hC);
+
+                        modificarLogroPrimerCombate();
+                        cambiarLogro(dinosaurio2);
+                        cambiarLogro(dinosaurio1);
                     }
                 });
             }
@@ -155,6 +157,95 @@ public class CombateFragment extends Fragment {
         }
     }
 
+    public void modificarLogroPrimerCombate(){
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                HistorialCombateDatabase database = HistorialCombateDatabase.getInstance(context);
+                if(database.getDao().getAll().size()>=1){
+                    LogroDatabase database2 = LogroDatabase.getInstance(context);
+                    Logro l = database2.getDao().getLogro("Realiza tu primer combate con la aplicación");
+                    l.setChecked("1");
+                    database2.getDao().update(l);
+                }
+            }
+        });
+    }
+
+    public void cambiarLogro(Dinosaurio dino){
+        if(dino.getDiet().equals("Carnivoro")) {
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    LogroDatabase database2 = LogroDatabase.getInstance(context);
+                    Logro l = database2.getDao().getLogro("Primera victoria de un dinosaurio carnívoro en tu aplicación");
+                    l.setChecked("1");
+                    database2.getDao().update(l);
+
+                }
+            });
+        }
+        if(dino.getDiet().equals("Herbivoro")) {
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    LogroDatabase database2 = LogroDatabase.getInstance(context);
+                    Logro l = database2.getDao().getLogro("Primera victoria de un dinosaurio herbívoro en tu aplicación");
+                    l.setChecked("1");
+                    database2.getDao().update(l);
+
+                }
+            });
+        }
+        if(dino.getDiet().equals("Omnivoro")) {
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    LogroDatabase database2 = LogroDatabase.getInstance(context);
+                    Logro l = database2.getDao().getLogro("Primera victoria de un dinosaurio omnivoro en tu aplicación");
+                    l.setChecked("1");
+                    database2.getDao().update(l);
+
+                }
+            });
+        }
+        if(dino.getPeriodName().equals("Jurasico")) {
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    LogroDatabase database2 = LogroDatabase.getInstance(context);
+                    Logro l = database2.getDao().getLogro("Primera victoria de un dinosaurio del jurásico en tu aplicación");
+                    l.setChecked("1");
+                    database2.getDao().update(l);
+
+                }
+            });
+        }
+        if(dino.getPeriodName().equals("Cretacico")) {
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    LogroDatabase database2 = LogroDatabase.getInstance(context);
+                    Logro l = database2.getDao().getLogro("Primera victoria de un dinosaurio del cretácico en tu aplicación");
+                    l.setChecked("1");
+                    database2.getDao().update(l);
+
+                }
+            });
+        }
+        if(dino.getPeriodName().equals("Triasico")) {
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    LogroDatabase database2 = LogroDatabase.getInstance(context);
+                    Logro l = database2.getDao().getLogro("Primera victoria de un dinosaurio del triásico en tu aplicación");
+                    l.setChecked("1");
+                    database2.getDao().update(l);
+
+                }
+            });
+        }
+    }
 
     @Override
     public void onResume() {

@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 import es.unex.dinopedia.databinding.ActivityMainBinding;
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
+import es.unex.dinopedia.roomdb.HistorialCombateDatabase;
 import es.unex.dinopedia.roomdb.LogroDatabase;
 
 public class MainActivity extends AppCompatActivity implements MainActivityInterface{
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         EnciclopediaFragment eF = new EnciclopediaFragment(MainActivity.this);
         FavoritoFragment fF = new FavoritoFragment(MainActivity.this);
         CombateFragment cF = new CombateFragment(MainActivity.this);
-        AlbumFragment aF = new AlbumFragment();
+        AlbumFragment aF = new AlbumFragment(MainActivity.this);
 
         DinosaurioAdapter mAdapter = new DinosaurioAdapter(MainActivity.this, new DinosaurioAdapter.OnItemClickListener() {
             @Override
@@ -81,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
             public void run() {
 
                 LogroDatabase.getInstance(MainActivity.this).getDao().deleteAll();
+                HistorialCombateDatabase.getInstance(MainActivity.this).getDao().deleteAll();
+                quitarFavoritos();
 
                 if (LogroDatabase.getInstance(MainActivity.this).getDao().count() == 0) {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.logros)));
@@ -179,5 +182,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         Intent intent = new Intent(MainActivity.this, DinosaurioInfoActivity.class);
         intent.putExtra("id", d.getId());
         startActivity(intent);
+    }
+
+    public void quitarFavoritos(){
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                DinosaurioDatabase database = DinosaurioDatabase.getInstance(MainActivity.this);
+                database.getDao().quitarFavorite();
+            }
+        });
     }
 }
