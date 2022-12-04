@@ -27,6 +27,7 @@ public class CuentaActivity extends AppCompatActivity {
         EditText eNUsuario = findViewById(R.id.eTUsuario);
 
         Switch swModo = findViewById(R.id.swModo);
+        Switch swInfoDino = findViewById(R.id.sInfoDino);
 
         usuario = getIntent().getStringExtra("USUARIO");
         eNUsuario.setText(usuario);
@@ -55,7 +56,7 @@ public class CuentaActivity extends AppCompatActivity {
                     public void run() {
                         int i = 0;
                         UsuarioDatabase database = UsuarioDatabase.getInstance(CuentaActivity.this);
-                        Usuario u = new Usuario(database.getDao().getUsuario().getId(), eNUsuario.getText().toString(), database.getDao().getUsuario().isModo());
+                        Usuario u = new Usuario(database.getDao().getUsuario().getId(), eNUsuario.getText().toString(), database.getDao().getUsuario().isModo(), database.getDao().getUsuario().isInfoDino());
                         database.getDao().update(u);
                     }
                 });
@@ -93,6 +94,46 @@ public class CuentaActivity extends AppCompatActivity {
                     CuentaActivity.this.setDayNight(0);
                 } else {
                     CuentaActivity.this.setDayNight(1);
+                }
+            }
+        });
+
+        swInfoDino.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(swInfoDino.isChecked()){
+                    AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            Usuario u = UsuarioDatabase.getInstance(CuentaActivity.this).getDao().getUsuario();
+                            u.setInfoDino(true);
+                            UsuarioDatabase.getInstance(CuentaActivity.this).getDao().update(u);
+                        }
+                    });
+                }
+                else{
+                    AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            Usuario u = UsuarioDatabase.getInstance(CuentaActivity.this).getDao().getUsuario();
+                            u.setInfoDino(false);
+                            UsuarioDatabase.getInstance(CuentaActivity.this).getDao().update(u);
+                        }
+                    });
+                }
+            }
+        });
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                Usuario u = UsuarioDatabase.getInstance(CuentaActivity.this).getDao().getUsuario();
+                if(u!=null) {
+                    if (u.isInfoDino()) {
+                        AppExecutors.getInstance().mainThread().execute(() -> swInfoDino.setChecked(true));
+                    } else {
+                        AppExecutors.getInstance().mainThread().execute(() -> swInfoDino.setChecked(false));
+                    }
                 }
             }
         });
