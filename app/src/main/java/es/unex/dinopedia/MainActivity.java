@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityInter
         replaceFragment(mF);
 
         EnciclopediaFragment eF = new EnciclopediaFragment(MainActivity.this);
-        FavoritoFragment fF = new FavoritoFragment();
+        FavoritoFragment fF = new FavoritoFragment(MainActivity.this);
         CombateFragment cF = new CombateFragment(MainActivity.this);
         AlbumFragment aF = new AlbumFragment();
 
