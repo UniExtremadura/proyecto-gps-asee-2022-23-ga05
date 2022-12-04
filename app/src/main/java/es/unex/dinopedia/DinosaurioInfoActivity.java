@@ -2,6 +2,8 @@ package es.unex.dinopedia;
 
 import static es.unex.dinopedia.R.*;
 import static es.unex.dinopedia.R.id.*;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +29,7 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
     private Button bFavorite;
     private boolean infoDino=false;
     private List<Dinosaurio> dinoList = new ArrayList<>();
+    private String body;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +81,21 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
                 }
                 AppExecutors.getInstance().mainThread().execute(()->actualizarDinosaurio(d));
                 AppExecutors.getInstance().mainThread().execute(()->cambiarFavorito(d));
+            }
+        });
+
+        Button bt = findViewById(bCompartir);
+
+        bt.setOnClickListener(new View.OnClickListener () {
+
+            @Override
+            public void onClick(View v){
+                Intent myIntent = new Intent(Intent.ACTION_SEND);
+                myIntent.setType("text/plain");
+                body = "¡Mira que dinosaurio más interesante! -> https://acortar.link/RzE6K";
+                myIntent.putExtra(Intent.EXTRA_TEXT,body);
+                startActivity(Intent.createChooser(myIntent, "Share Using"));
+
             }
         });
     }
