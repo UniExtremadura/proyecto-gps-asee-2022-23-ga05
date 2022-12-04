@@ -8,6 +8,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
+
 import java.util.ArrayList;
 import java.util.List;
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
@@ -19,6 +23,8 @@ public class EnciclopediaFragment extends Fragment {
     private DinosaurioAdapter mAdapter;
     private Context context;
     private List<Dinosaurio> dinoList;
+    private List<Dinosaurio> dinoOpciones;
+    private Spinner opciones;
     private boolean aplicar=false;
 
     public EnciclopediaFragment(){
@@ -81,6 +87,33 @@ public class EnciclopediaFragment extends Fragment {
         // - Attach the adapter to the RecyclerView
         mRecyclerView.setAdapter(mAdapter);
 
+        opciones = viewMain.findViewById(R.id.sOpciones);
+        ArrayAdapter<CharSequence> adp = ArrayAdapter.createFromResource(context, R.array.opciones, android.R.layout.simple_spinner_item);
+        opciones.setAdapter(adp);
+
+        Button bAplicar = viewMain.findViewById(R.id.bAplicar);
+        bAplicar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        DinosaurioDatabase database = DinosaurioDatabase.getInstance(context);
+                        dinoOpciones=database.getDao().getOpciones(opciones.getSelectedItem().toString());
+                    }
+                });
+                aplicar=true;
+            }
+        });
+
+        Button bRestaurar = viewMain.findViewById(R.id.bRestaurar);
+        bRestaurar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                aplicar=false;
+            }
+        });
+
         return viewMain;
     }
 
@@ -88,6 +121,9 @@ public class EnciclopediaFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if(mAdapter.getItemCount()==0)
-            mAdapter.load(dinoList);
+            if(aplicar)
+                mAdapter.load(dinoOpciones);
+            else
+                mAdapter.load(dinoList);
     }
 }
