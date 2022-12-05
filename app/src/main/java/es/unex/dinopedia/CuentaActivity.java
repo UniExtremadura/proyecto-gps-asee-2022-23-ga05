@@ -20,31 +20,33 @@ public class CuentaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cuenta);
-        Button bCambiar = findViewById(R.id.bCambiar);
-        Button bCerrarSesion = findViewById(R.id.bCerrarSesion);
         Button bAyuda = findViewById(R.id.bAyuda);
         Button bContacto = findViewById(R.id.bContactar);
+        Button bCambiar = findViewById(R.id.bCambiar);
+        Button bCerrarSesion = findViewById(R.id.bCerrarSesion);
         EditText eNUsuario = findViewById(R.id.eTUsuario);
 
         Switch swModo = findViewById(R.id.swModo);
         Switch swInfoDino = findViewById(R.id.sInfoDino);
 
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+        usuario = getIntent().getStringExtra("USUARIO");
+        eNUsuario.setText(usuario);
+
+        bAyuda.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                Usuario u = UsuarioDatabase.getInstance(CuentaActivity.this).getDao().getUsuario();
-                if(u!=null) {
-                    if (u.isInfoDino()) {
-                        AppExecutors.getInstance().mainThread().execute(() -> swInfoDino.setChecked(true));
-                    } else {
-                        AppExecutors.getInstance().mainThread().execute(() -> swInfoDino.setChecked(false));
-                    }
-                }
+            public void onClick(View view) {
+                Intent intent = new Intent(CuentaActivity.this, AyudaActivity.class);
+                startActivity(intent);
             }
         });
 
-        usuario=getIntent().getStringExtra("USUARIO");
-        eNUsuario.setText(usuario);
+        bContacto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CuentaActivity.this, ContactoActivity.class);
+                startActivity(intent);
+            }
+        });
 
         bCambiar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +54,7 @@ public class CuentaActivity extends AppCompatActivity {
                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
                     @Override
                     public void run() {
+                        int i = 0;
                         UsuarioDatabase database = UsuarioDatabase.getInstance(CuentaActivity.this);
                         Usuario u = new Usuario(database.getDao().getUsuario().getId(), eNUsuario.getText().toString(), database.getDao().getUsuario().isModo(), database.getDao().getUsuario().isInfoDino());
                         database.getDao().update(u);
@@ -73,22 +76,6 @@ public class CuentaActivity extends AppCompatActivity {
             }
         });
 
-        bAyuda.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(CuentaActivity.this, AyudaActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        bContacto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(CuentaActivity.this, ContactoActivity.class);
-                startActivity(intent);
-            }
-        });
-
         swModo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,18 +83,16 @@ public class CuentaActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         Usuario aux = UsuarioDatabase.getInstance(CuentaActivity.this).getDao().getUsuario();
-                        if(aux.isModo()==false){
+                        if (aux.isModo() == false) {
                             UsuarioDatabase.getInstance(CuentaActivity.this).getDao().updateModoUsuario(aux.getId(), true);
-                        }
-                        else{
+                        } else {
                             UsuarioDatabase.getInstance(CuentaActivity.this).getDao().updateModoUsuario(aux.getId(), false);
                         }
                     }
                 });
-                if (swModo.isChecked()){
+                if (swModo.isChecked()) {
                     CuentaActivity.this.setDayNight(0);
-                }
-                else{
+                } else {
                     CuentaActivity.this.setDayNight(1);
                 }
             }
@@ -135,6 +120,20 @@ public class CuentaActivity extends AppCompatActivity {
                             UsuarioDatabase.getInstance(CuentaActivity.this).getDao().update(u);
                         }
                     });
+                }
+            }
+        });
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                Usuario u = UsuarioDatabase.getInstance(CuentaActivity.this).getDao().getUsuario();
+                if(u!=null) {
+                    if (u.isInfoDino()) {
+                        AppExecutors.getInstance().mainThread().execute(() -> swInfoDino.setChecked(true));
+                    } else {
+                        AppExecutors.getInstance().mainThread().execute(() -> swInfoDino.setChecked(false));
+                    }
                 }
             }
         });

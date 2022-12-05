@@ -68,41 +68,7 @@ public class DinosaurioManagerActivity extends AppCompatActivity {
         //DinosaurioCRUD crud = DinosaurioCRUD.getInstance(this);
         DinosaurioDatabase.getInstance(this);
     }
-    /*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
-        log("Entered onActivityResult()");
 
-        //  - Check result code and request code.
-        // If user submitted a new ToDoItem
-        // Create a new ToDoItem from the data Intent
-        // and then add it to the adapter
-        if (requestCode == ADD_TODO_ITEM_REQUEST){
-            if (resultCode == RESULT_OK){
-                Dinosaurio item = new Dinosaurio(data);
-
-                //insert into DB
-                DinosaurioCRUD crud = DinosaurioCRUD.getInstance(this);
-                long id = crud.insert(item);
-
-                AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        DinosaurioDatabase database = DinosaurioDatabase.getInstance(DinosaurioManagerActivity.this);
-                        long id = database.getDao().insert(item);
-
-                        //update item ID
-                        item.setId(id);
-
-                        //insert into adapter list
-                        runOnUiThread(() -> mAdapter.add(item));
-                    }
-                });
-            }
-        }
-    }
-    */
     @Override
     public void onResume() {
         super.onResume();
@@ -120,15 +86,7 @@ public class DinosaurioManagerActivity extends AppCompatActivity {
         // ALTERNATIVE: Save all ToDoItems
 
     }
-/*
-    @Override
-    protected void onDestroy() {
-        DinosaurioCRUD crud = DinosaurioCRUD.getInstance(this);
-        DinosaurioDatabase.getInstance(this).close();
-        crud.close();
-        super.onDestroy();
-    }
-*/
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -137,30 +95,7 @@ public class DinosaurioManagerActivity extends AppCompatActivity {
         menu.add(Menu.NONE, MENU_DUMP, Menu.NONE, "Dump to log");
         return true;
     }
-/*
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case MENU_DELETE:
-                DinosaurioCRUD crud = DinosaurioCRUD.getInstance(this);
-                crud.deleteAll();
-                AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        DinosaurioDatabase.getInstance(DinosaurioManagerActivity.this).getDao().deleteAll();
-                       runOnUiThread(() -> mAdapter.clear());
-                    }
-                });
 
-                return true;
-            case MENU_DUMP:
-                dump();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-*/
     private void dump() {
 
         for (int i = 0; i < mAdapter.getItemCount(); i++) {
@@ -169,22 +104,7 @@ public class DinosaurioManagerActivity extends AppCompatActivity {
         }
 
     }
-/*
-    // Load stored Dinosaurios
-    private void loadItems() {
-        DinosaurioCRUD crud = DinosaurioCRUD.getInstance(this);
-        List<Dinosaurio> items = crud.getAll();
 
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                List<Dinosaurio> items = DinosaurioDatabase.getInstance(DinosaurioManagerActivity.this).getDao().getAll();
-                runOnUiThread( () -> mAdapter.load(items));
-            }
-        });
-
-    }
-*/
     private void log(String msg) {
         try {
             Thread.sleep(500);

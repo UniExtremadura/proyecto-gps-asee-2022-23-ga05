@@ -21,25 +21,8 @@ import es.unex.dinopedia.roomdb.DinosaurioDatabase;
 import es.unex.dinopedia.roomdb.HistorialCombateDatabase;
 import es.unex.dinopedia.roomdb.LogroDatabase;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CombateFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class CombateFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private static DinosaurioAdapter mAdapter;
     private Spinner mSpinnerdino1;
     private Spinner mSpinnerdino2;
     private List<String> dinoListNombres = new ArrayList<>();
@@ -53,14 +36,6 @@ public class CombateFragment extends Fragment {
         context = cont;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-
-     * @return A new instance of fragment CombateFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static CombateFragment newInstance(Context cont) {
         CombateFragment fragment = new CombateFragment(cont);
         Bundle args = new Bundle();
@@ -173,6 +148,8 @@ public class CombateFragment extends Fragment {
                         database.getDao().insert(hC);
 
                         modificarLogroPrimerCombate();
+                        cambiarLogro(dinosaurio2);
+                        cambiarLogro(dinosaurio1);
                     }
                 });
             }
@@ -200,10 +177,10 @@ public class CombateFragment extends Fragment {
             AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
-                        LogroDatabase database2 = LogroDatabase.getInstance(context);
-                        Logro l = database2.getDao().getLogro("Primera victoria de un dinosaurio carnívoro en tu aplicación");
-                        l.setChecked("1");
-                        database2.getDao().update(l);
+                    LogroDatabase database2 = LogroDatabase.getInstance(context);
+                    Logro l = database2.getDao().getLogro("Primera victoria de un dinosaurio carnívoro en tu aplicación");
+                    l.setChecked("1");
+                    database2.getDao().update(l);
 
                 }
             });
@@ -212,10 +189,10 @@ public class CombateFragment extends Fragment {
             AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
-                        LogroDatabase database2 = LogroDatabase.getInstance(context);
-                        Logro l = database2.getDao().getLogro("Primera victoria de un dinosaurio herbívoro en tu aplicación");
-                        l.setChecked("1");
-                        database2.getDao().update(l);
+                    LogroDatabase database2 = LogroDatabase.getInstance(context);
+                    Logro l = database2.getDao().getLogro("Primera victoria de un dinosaurio herbívoro en tu aplicación");
+                    l.setChecked("1");
+                    database2.getDao().update(l);
 
                 }
             });
@@ -224,10 +201,10 @@ public class CombateFragment extends Fragment {
             AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
-                        LogroDatabase database2 = LogroDatabase.getInstance(context);
-                        Logro l = database2.getDao().getLogro("Primera victoria de un dinosaurio omnivoro en tu aplicación");
-                        l.setChecked("1");
-                        database2.getDao().update(l);
+                    LogroDatabase database2 = LogroDatabase.getInstance(context);
+                    Logro l = database2.getDao().getLogro("Primera victoria de un dinosaurio omnivoro en tu aplicación");
+                    l.setChecked("1");
+                    database2.getDao().update(l);
 
                 }
             });
@@ -236,10 +213,10 @@ public class CombateFragment extends Fragment {
             AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
-                        LogroDatabase database2 = LogroDatabase.getInstance(context);
-                        Logro l = database2.getDao().getLogro("Primera victoria de un dinosaurio del jurásico en tu aplicación");
-                        l.setChecked("1");
-                        database2.getDao().update(l);
+                    LogroDatabase database2 = LogroDatabase.getInstance(context);
+                    Logro l = database2.getDao().getLogro("Primera victoria de un dinosaurio del jurásico en tu aplicación");
+                    l.setChecked("1");
+                    database2.getDao().update(l);
 
                 }
             });
@@ -248,10 +225,10 @@ public class CombateFragment extends Fragment {
             AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
-                        LogroDatabase database2 = LogroDatabase.getInstance(context);
-                        Logro l = database2.getDao().getLogro("Primera victoria de un dinosaurio del cretácico en tu aplicación");
-                        l.setChecked("1");
-                        database2.getDao().update(l);
+                    LogroDatabase database2 = LogroDatabase.getInstance(context);
+                    Logro l = database2.getDao().getLogro("Primera victoria de un dinosaurio del cretácico en tu aplicación");
+                    l.setChecked("1");
+                    database2.getDao().update(l);
 
                 }
             });
@@ -260,10 +237,10 @@ public class CombateFragment extends Fragment {
             AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
-                        LogroDatabase database2 = LogroDatabase.getInstance(context);
-                        Logro l = database2.getDao().getLogro("Primera victoria de un dinosaurio del triásico en tu aplicación");
-                        l.setChecked("1");
-                        database2.getDao().update(l);
+                    LogroDatabase database2 = LogroDatabase.getInstance(context);
+                    Logro l = database2.getDao().getLogro("Primera victoria de un dinosaurio del triásico en tu aplicación");
+                    l.setChecked("1");
+                    database2.getDao().update(l);
 
                 }
             });

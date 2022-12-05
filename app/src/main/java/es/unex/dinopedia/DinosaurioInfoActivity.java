@@ -3,33 +3,19 @@ package es.unex.dinopedia;
 import static es.unex.dinopedia.R.*;
 import static es.unex.dinopedia.R.id.*;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.gson.Gson;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
 import es.unex.dinopedia.roomdb.DinosaurioDatabase;
-import es.unex.dinopedia.roomdb.HistorialCombateDatabase;
 import es.unex.dinopedia.roomdb.LogroDatabase;
 import es.unex.dinopedia.roomdb.UsuarioDatabase;
-
 
 public class DinosaurioInfoActivity extends AppCompatActivity {
 
@@ -40,11 +26,11 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
     private TextView tSpeciesD;
     private TextView tPeriodNameD;
     private TextView tLengthMetersD;
-    private Button bFavorite;
     private Bundle bundle;
+    private Button bFavorite;
+    private boolean infoDino=false;
     private List<Dinosaurio> dinoList = new ArrayList<>();
     private String body;
-    private boolean infoDino=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,18 +50,13 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
             }
         });
 
-        Button bt = findViewById(bCompartir);
-
-        bt.setOnClickListener(new View.OnClickListener () {
-
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
-            public void onClick(View v){
-                Intent myIntent = new Intent(Intent.ACTION_SEND);
-                myIntent.setType("text/plain");
-                body = "¡Mira que dinosaurio más interesante! -> https://acortar.link/RzE6K";
-                myIntent.putExtra(Intent.EXTRA_TEXT,body);
-                startActivity(Intent.createChooser(myIntent, "Share Using"));
-
+            public void run() {
+                DinosaurioDatabase database = DinosaurioDatabase.getInstance(DinosaurioInfoActivity.this);
+                Dinosaurio d = database.getDao().getDinosaurioId(bundle.getLong("id"));
+                AppExecutors.getInstance().mainThread().execute(()->actualizarDinosaurio(d));
+                AppExecutors.getInstance().mainThread().execute(()->mostrarImagenes(d));
             }
         });
 
@@ -100,8 +81,22 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
                     AppExecutors.getInstance().mainThread().execute(()->swFavorito.setChecked(true));
                 }
                 AppExecutors.getInstance().mainThread().execute(()->actualizarDinosaurio(d));
-                AppExecutors.getInstance().mainThread().execute(()->mostrarImagenes(d));
                 AppExecutors.getInstance().mainThread().execute(()->cambiarFavorito(d));
+            }
+        });
+
+        Button bt = findViewById(bCompartir);
+
+        bt.setOnClickListener(new View.OnClickListener () {
+
+            @Override
+            public void onClick(View v){
+                Intent myIntent = new Intent(Intent.ACTION_SEND);
+                myIntent.setType("text/plain");
+                body = "¡Mira que dinosaurio más interesante! -> https://acortar.link/RzE6K";
+                myIntent.putExtra(Intent.EXTRA_TEXT,body);
+                startActivity(Intent.createChooser(myIntent, "Share Using"));
+
             }
         });
     }
