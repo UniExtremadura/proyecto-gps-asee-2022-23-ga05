@@ -22,6 +22,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="40dp"
         android:background="#00FFFFFF"
+        android:contentDescription="@string/hello_blank_fragment"
         app:layout_constraintEnd_toStartOf="@+id/bAplicar"
         app:layout_constraintHorizontal_bias="0.013"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,5 +47,4 @@
         android:text="Restaurar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bAplicar" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

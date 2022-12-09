@@ -4,10 +4,8 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
-
 import java.util.List;
-
-import es.unex.dinopedia.Usuario;
+import es.unex.dinopedia.Model.Usuario;
 
 @Dao
 public interface UsuarioDao {
