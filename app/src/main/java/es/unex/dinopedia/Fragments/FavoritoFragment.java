@@ -34,7 +34,7 @@ public class FavoritoFragment extends Fragment {
         context = cont;
         mAdapter = new DinosaurioAdapter(context, item -> {});
         dinoList = new ArrayList<>();
-        cargarDinosaurios();
+
     }
 
     @Override
@@ -45,6 +45,8 @@ public class FavoritoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View viewMain = inflater.inflate(R.layout.fragment_favorito, container, false);
+
+        cargarDinosaurios();
 
         mRecyclerView = viewMain.findViewById(R.id.my_recycler_view);
 
