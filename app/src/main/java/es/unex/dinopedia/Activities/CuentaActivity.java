@@ -119,7 +119,7 @@ public class CuentaActivity extends AppCompatActivity {
         swModo.setOnClickListener(view -> {
             AppExecutors.getInstance().diskIO().execute(() -> {
                 Usuario aux = DinopediaDatabase.getInstance(CuentaActivity.this).getUsuarioDao().getUsuario();
-                if(aux.isModo()==false){
+                if(!aux.isModo()){
                     DinopediaDatabase.getInstance(CuentaActivity.this).getUsuarioDao().updateModoUsuario(aux.getId(), true);
                 }
                 else{
