@@ -119,7 +119,7 @@ public class ModoNocheTest {
         }
 
         //Se comprueba que sea modo oscuro
-        assertEquals(AppCompatDelegate.getDefaultNightMode(),2);
+        assertEquals(2, AppCompatDelegate.getDefaultNightMode());
 
         pressBack();
 
@@ -156,7 +156,7 @@ public class ModoNocheTest {
         switch_2.perform(click());
 
         //Se comprueba que sea modo claro
-        assertEquals(AppCompatDelegate.getDefaultNightMode(),1);
+        assertEquals(1, AppCompatDelegate.getDefaultNightMode());
 
         try {
             Thread.sleep(1500);
