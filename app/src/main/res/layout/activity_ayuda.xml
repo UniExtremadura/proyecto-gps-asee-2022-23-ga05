@@ -54,7 +54,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.489"
-        app:srcCompat="@drawable/ic_baseline_menu_book_24" />
+        app:srcCompat="@drawable/ic_baseline_menu_book_24"
+        android:contentDescription="Icono Enciclopedia"/>
 
     <TextView
         android:id="@+id/textView4"
@@ -90,7 +91,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.324"
-        app:srcCompat="@drawable/ic_baseline_fort_24" />
+        app:srcCompat="@drawable/ic_baseline_fort_24"
+        android:contentDescription="Icono Combate"/>
 
     <TextView
         android:id="@+id/tFavoritos"
@@ -126,7 +128,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.641"
-        app:srcCompat="@drawable/ic_baseline_favorite_24" />
+        app:srcCompat="@drawable/ic_baseline_favorite_24"
+        android:contentDescription="Icono Favoritos"/>
 
     <ImageView
         android:id="@+id/imageView5"
@@ -138,7 +141,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.157"
-        app:srcCompat="@drawable/ic_baseline_house_24" />
+        app:srcCompat="@drawable/ic_baseline_house_24"
+        android:contentDescription="Icono Principal"/>
 
     <TextView
         android:id="@+id/TPFAV"
@@ -163,7 +167,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.836"
-        app:srcCompat="@drawable/ic_baseline_emoji_events_24" />
+        app:srcCompat="@drawable/ic_baseline_emoji_events_24"
+        android:contentDescription="Icono Logro"/>
 
     <TextView
         android:id="@+id/TPLOGROS"
