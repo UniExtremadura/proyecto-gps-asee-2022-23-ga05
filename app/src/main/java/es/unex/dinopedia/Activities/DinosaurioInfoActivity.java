@@ -121,7 +121,7 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
                 d.setFavorite("0");
                 database.getDinosaurioDao().update(d);
             }
-            if(database.getDinosaurioDao().getFavorito().size()>=1) {
+            if(database.getDinosaurioDao().getFavorito().isEmpty()) {
                 AppExecutors.getInstance().diskIO().execute(() -> {
                     Logro l = database.getLogroDao().getLogro("Marca tu primer dinosaurio favorito");
                     l.setChecked("1");
