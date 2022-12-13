@@ -12,7 +12,7 @@ import es.unex.dinopedia.Model.Dinosaurio;
 import es.unex.dinopedia.R;
 
 public class DinosaurioAdapter extends RecyclerView.Adapter<DinosaurioAdapter.ViewHolder> {
-    private List<Dinosaurio> mItems = new ArrayList<Dinosaurio>();
+    private List<Dinosaurio> mItems = new ArrayList<>();
     Context mContext;
 
     public interface OnItemClickListener {
