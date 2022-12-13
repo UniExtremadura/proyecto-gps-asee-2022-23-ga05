@@ -41,8 +41,7 @@ public class HistorialCombateActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if(mAdapter.getItemCount()==0)
-            if(listaCombates!=null)
+        if(mAdapter.getItemCount()==0 && listaCombates!=null)
                 mAdapter.load(listaCombates);
     }
 }
