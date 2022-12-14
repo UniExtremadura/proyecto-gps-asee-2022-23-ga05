@@ -1,6 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">DinoPedia</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="st1">Encuentra aquí el \'Dinosaurio del día\'. Registrate o accede a tu cuenta para acceder a todo el contenido.</string>
     <string name="st2">PANTALLA ENCICLOPEDIA</string>
     <string name="st3">PANTALLA PRINCIPAL</string>
