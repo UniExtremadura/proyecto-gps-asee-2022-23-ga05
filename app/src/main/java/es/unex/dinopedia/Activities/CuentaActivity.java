@@ -2,15 +2,20 @@ package es.unex.dinopedia.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
+
+import es.unex.dinopedia.Networking.AppContainer;
 import es.unex.dinopedia.AppExecutors.AppExecutors;
+import es.unex.dinopedia.ViewModel.CuentaActivityViewModel;
+import es.unex.dinopedia.Networking.MyApplication;
 import es.unex.dinopedia.Model.Usuario;
 import es.unex.dinopedia.R;
-import es.unex.dinopedia.roomdb.DinopediaDatabase;
 
 public class CuentaActivity extends AppCompatActivity {
 
@@ -22,6 +27,7 @@ public class CuentaActivity extends AppCompatActivity {
     private EditText eNUsuario;
     private Switch swModo;
     private Switch swInfoDino;
+    private CuentaActivityViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +40,9 @@ public class CuentaActivity extends AppCompatActivity {
         eNUsuario = findViewById(R.id.eTUsuario);
         swModo = findViewById(R.id.swModo);
         swInfoDino = findViewById(R.id.sInfoDino);
+
+        AppContainer appContainer = ((MyApplication) getApplication()).appContainer;
+        mViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory)appContainer.cuentaFactory).get(CuentaActivityViewModel.class);
 
         activarSwitch();
 
@@ -58,45 +67,43 @@ public class CuentaActivity extends AppCompatActivity {
     }
 
     private void cambiarSwitch(){
+        Switch swModo = findViewById(R.id.swModo);
         AppExecutors.getInstance().diskIO().execute(() -> {
-            Switch swModo = findViewById(R.id.swModo);
-            Usuario u = DinopediaDatabase.getInstance(CuentaActivity.this).getUsuarioDao().getUsuario();
+            Usuario u = mViewModel.getUsuario();
             if(u.isModo()){
-                AppExecutors.getInstance().mainThread().execute(()->swModo.setChecked(true));
+                AppExecutors.getInstance().mainThread().execute(() -> swModo.setChecked(true));
             }
             else{
-                AppExecutors.getInstance().mainThread().execute(()->swModo.setChecked(false));
+                AppExecutors.getInstance().mainThread().execute(() -> swModo.setChecked(false));
             }
         });
     }
 
     private void activarSwitch(){
         AppExecutors.getInstance().diskIO().execute(() -> {
-        Usuario u = DinopediaDatabase.getInstance(CuentaActivity.this).getUsuarioDao().getUsuario();
-        if(u!=null) {
-            if (u.isInfoDino()) {
-                AppExecutors.getInstance().mainThread().execute(() -> swInfoDino.setChecked(true));
-            } else {
-                AppExecutors.getInstance().mainThread().execute(() -> swInfoDino.setChecked(false));
+            Usuario u = mViewModel.getUsuario();
+            if(u!=null) {
+                if (u.isInfoDino()) {
+                    AppExecutors.getInstance().mainThread().execute(() -> swInfoDino.setChecked(true));
+                } else {
+                    AppExecutors.getInstance().mainThread().execute(() -> swInfoDino.setChecked(false));
+                }
             }
-        }
-    });
+        });
     }
 
     private void botonCambiar(){
-        bCambiar.setOnClickListener(view -> AppExecutors.getInstance().diskIO().execute(() -> {
-            DinopediaDatabase database = DinopediaDatabase.getInstance(CuentaActivity.this);
-            Usuario u = new Usuario(database.getUsuarioDao().getUsuario().getId(), eNUsuario.getText().toString(), database.getUsuarioDao().getUsuario().isModo(), database.getUsuarioDao().getUsuario().isInfoDino());
-            database.getUsuarioDao().update(u);
-        }));
+        bCambiar.setOnClickListener(view -> {
+            AppExecutors.getInstance().diskIO().execute(() -> {
+                Usuario u = new Usuario(mViewModel.getUsuario().getId(), eNUsuario.getText().toString(), mViewModel.getUsuario().isModo(), mViewModel.getUsuario().isInfoDino());
+                mViewModel.actualizar(u);
+            });
+        });
     }
 
     private void botonCerrarSesion(){
         bCerrarSesion.setOnClickListener(view -> {
-            AppExecutors.getInstance().diskIO().execute(() -> {
-                DinopediaDatabase database = DinopediaDatabase.getInstance(CuentaActivity.this);
-                database.getUsuarioDao().deleteAll();
-            });
+            AppExecutors.getInstance().diskIO().execute(() -> mViewModel.borrarTodo());
             finish();
         });
     }
@@ -117,21 +124,22 @@ public class CuentaActivity extends AppCompatActivity {
 
     private void switchModo() {
         swModo.setOnClickListener(view -> {
-            AppExecutors.getInstance().diskIO().execute(() -> {
-                Usuario aux = DinopediaDatabase.getInstance(CuentaActivity.this).getUsuarioDao().getUsuario();
-                if(aux.isModo()==false){
-                    DinopediaDatabase.getInstance(CuentaActivity.this).getUsuarioDao().updateModoUsuario(aux.getId(), true);
-                }
-                else{
-                    DinopediaDatabase.getInstance(CuentaActivity.this).getUsuarioDao().updateModoUsuario(aux.getId(), false);
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    Usuario aux = mViewModel.getUsuario();
+                    if (aux.isModo() == false) {
+                        mViewModel.actualizarModoUsuario(aux.getId(), true);
+                    } else {
+                        mViewModel.actualizarModoUsuario(aux.getId(), false);
+                    }
+                    if (swModo.isChecked()) {
+                        AppExecutors.getInstance().mainThread().execute(() -> CuentaActivity.this.setDayNight(0));
+                    } else {
+                        AppExecutors.getInstance().mainThread().execute(() -> CuentaActivity.this.setDayNight(1));
+                    }
                 }
             });
-            if (swModo.isChecked()){
-                CuentaActivity.this.setDayNight(0);
-            }
-            else{
-                CuentaActivity.this.setDayNight(1);
-            }
         });
     }
 
@@ -139,16 +147,16 @@ public class CuentaActivity extends AppCompatActivity {
         swInfoDino.setOnClickListener(v -> {
             if(swInfoDino.isChecked()){
                 AppExecutors.getInstance().diskIO().execute(() -> {
-                    Usuario u = DinopediaDatabase.getInstance(CuentaActivity.this).getUsuarioDao().getUsuario();
+                    Usuario u = mViewModel.getUsuario();
                     u.setInfoDino(true);
-                    DinopediaDatabase.getInstance(CuentaActivity.this).getUsuarioDao().update(u);
+                    mViewModel.actualizar(u);
                 });
             }
             else{
                 AppExecutors.getInstance().diskIO().execute(() -> {
-                    Usuario u = DinopediaDatabase.getInstance(CuentaActivity.this).getUsuarioDao().getUsuario();
+                    Usuario u = mViewModel.getUsuario();
                     u.setInfoDino(false);
-                    DinopediaDatabase.getInstance(CuentaActivity.this).getUsuarioDao().update(u);
+                    mViewModel.actualizar(u);
                 });
             }
         });

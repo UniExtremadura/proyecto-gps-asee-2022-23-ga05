@@ -3,17 +3,18 @@ package es.unex.dinopedia.Fragments;
 import android.content.Context;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import java.util.List;
-import es.unex.dinopedia.AppExecutors.AppExecutors;
-import es.unex.dinopedia.Model.Logro;
+
+import es.unex.dinopedia.ViewModel.AlbumFragmentViewModel;
+import es.unex.dinopedia.Networking.AppContainer;
 import es.unex.dinopedia.Adapters.LogroAdapter;
+import es.unex.dinopedia.Networking.MyApplication;
 import es.unex.dinopedia.R;
-import es.unex.dinopedia.roomdb.DinopediaDatabase;
 
 public class AlbumFragment extends Fragment {
 
@@ -21,7 +22,8 @@ public class AlbumFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private LogroAdapter mAdapter;
     private Context context;
-    private List<Logro> listaLogros;
+    private AlbumFragmentViewModel mViewModel;
+
     public AlbumFragment(Context cont) {
         context = cont;
         mAdapter = new LogroAdapter(context, item -> {});
@@ -30,6 +32,12 @@ public class AlbumFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        AppContainer appContainer = ((MyApplication) AlbumFragment.this.getActivity().getApplication()).appContainer;
+        mViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory)appContainer.albumFragmentFactory).get(AlbumFragmentViewModel.class);
+        mViewModel.getLogroActivos().observe(this, logros -> {
+            mAdapter.swap(logros);
+        });
     }
 
     @Override
@@ -48,19 +56,11 @@ public class AlbumFragment extends Fragment {
 
         mRecyclerView.setAdapter(mAdapter);
 
-        AppExecutors.getInstance().diskIO().execute(() -> {
-            DinopediaDatabase database = DinopediaDatabase.getInstance(context);
-            listaLogros = database.getLogroDao().getCheck();
-        });
-
         return viewMain;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(mAdapter.getItemCount()==0)
-            if(listaLogros!=null)
-                mAdapter.load(listaLogros);
     }
 }

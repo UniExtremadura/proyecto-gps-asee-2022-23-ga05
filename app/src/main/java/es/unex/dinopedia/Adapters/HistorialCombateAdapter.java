@@ -8,6 +8,8 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
+
+import es.unex.dinopedia.Model.Dinosaurio;
 import es.unex.dinopedia.Model.HistorialCombate;
 import es.unex.dinopedia.R;
 
@@ -76,8 +78,13 @@ public class HistorialCombateAdapter extends RecyclerView.Adapter<HistorialComba
         }
 
         public void bind(final HistorialCombate hC, final OnItemClickListener listener) {
-            nombre.setText(hC.getDinosaurio1()+ "-" + hC.getDinosaurio2() + "-" + hC.getEstado());
+            nombre.setText(hC.getDinosaurio1()+ " - " + hC.getDinosaurio2() + " - " + hC.getEstado());
             itemView.setOnClickListener(v -> listener.onItemClick(hC));
         }
+    }
+
+    public void swap(List<HistorialCombate> dataset){
+        mItems=dataset;
+        notifyDataSetChanged();
     }
 }

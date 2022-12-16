@@ -10,9 +10,13 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
+import es.unex.dinopedia.Networking.AppContainer;
 import es.unex.dinopedia.AppExecutors.AppExecutors;
+import es.unex.dinopedia.ViewModel.DinosaurioInfoActivityViewModel;
+import es.unex.dinopedia.Networking.MyApplication;
 import es.unex.dinopedia.Model.Dinosaurio;
-import es.unex.dinopedia.Model.Logro;
 import es.unex.dinopedia.Model.Usuario;
 import es.unex.dinopedia.R;
 import es.unex.dinopedia.roomdb.DinopediaDatabase;
@@ -33,37 +37,50 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
     private Switch swFavorito;
     private Button bt;
 
+    private DinosaurioInfoActivityViewModel mViewModel;
+
+    DinopediaDatabase database;
+    Dinosaurio d;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(layout.activity_info_dinosaurio);
         bundle = getIntent().getExtras();
+        long id = bundle.getLong("id");
         swFavorito = findViewById(R.id.sFavorito);
+        database = DinopediaDatabase.getInstance(DinosaurioInfoActivity.this);
+
+        AppContainer appContainer = ((MyApplication) getApplication()).appContainer;
+        mViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory)appContainer.dinoInfoFactory).get(DinosaurioInfoActivityViewModel.class);
 
         botonCompartir();
-        marcarFavorito();
-        cargarVariable();
         AppExecutors.getInstance().diskIO().execute(() -> {
-            DinopediaDatabase database = DinopediaDatabase.getInstance(DinosaurioInfoActivity.this);
-            Dinosaurio d = database.getDinosaurioDao().getDinosaurioId(bundle.getLong("id"));
-            AppExecutors.getInstance().mainThread().execute(()->actualizarDinosaurio(d));
-            AppExecutors.getInstance().mainThread().execute(()->mostrarImagenes(d));
-            if(d.getFavorite().equals("0")){
-                AppExecutors.getInstance().mainThread().execute(()->swFavorito.setChecked(false));
+            marcarFavorito();
+            cargarVariable();
+            d = mViewModel.getDino(id);
+            AppExecutors.getInstance().mainThread().execute(() -> {
+                actualizarDinosaurio(d);
+                mostrarImagenes(d);
+                if(d.getFavorite().equals("0"))
+                    swFavorito.setChecked(false);
+                else
+                    swFavorito.setChecked(true);
+            });
+        });
+
+        swFavorito.setOnClickListener(v -> {
+            if (d!=null) {
+                d.setFavorite(swFavorito.isChecked()?"1":"0");
+                AppExecutors.getInstance().diskIO().execute(() -> mViewModel.actualizarDinosaurio(d));
             }
-            else{
-                AppExecutors.getInstance().mainThread().execute(()->swFavorito.setChecked(true));
-            }
-            AppExecutors.getInstance().mainThread().execute(()->cambiarFavorito(d));
         });
     }
 
     private void cargarVariable(){
-        AppExecutors.getInstance().diskIO().execute(() -> {
-            Usuario u = DinopediaDatabase.getInstance(DinosaurioInfoActivity.this).getUsuarioDao().getUsuario();
-            if(u!=null)
-                infoDino=u.isInfoDino();
-        });
+        Usuario u = mViewModel.getUsuario();
+        if(u!=null)
+            infoDino=u.isInfoDino();
     }
 
     private void botonCompartir(){
@@ -99,40 +116,11 @@ public class DinosaurioInfoActivity extends AppCompatActivity {
 
     private void marcarFavorito(){
         View v = this.findViewById(android.R.id.content);
-
-        AppExecutors.getInstance().diskIO().execute(() -> {
-            DinopediaDatabase database = DinopediaDatabase.getInstance(DinosaurioInfoActivity.this);
-            if(database.getUsuarioDao().getUsuario()!=null)
-                swFavorito.setVisibility(v.VISIBLE);
-        });
-    }
-
-    private void cambiarFavorito(Dinosaurio d){
-        DinopediaDatabase database = DinopediaDatabase.getInstance(DinosaurioInfoActivity.this);
-
-        Switch swFavorito = findViewById(R.id.sFavorito);
-
-        swFavorito.setOnClickListener(v -> AppExecutors.getInstance().diskIO().execute(() -> {
-            if(swFavorito.isChecked()){
-                d.setFavorite("1");
-                database.getDinosaurioDao().update(d);
-            }
-            else{
-                d.setFavorite("0");
-                database.getDinosaurioDao().update(d);
-            }
-            if(database.getDinosaurioDao().getFavorito().size()>=1) {
-                AppExecutors.getInstance().diskIO().execute(() -> {
-                    Logro l = database.getLogroDao().getLogro("Marca tu primer dinosaurio favorito");
-                    l.setChecked("1");
-                    database.getLogroDao().update(l);
-                });
-            }
-        }));
+        if(mViewModel.getUsuario()!=null)
+            swFavorito.setVisibility(v.VISIBLE);
     }
 
     public void mostrarImagenes(Dinosaurio d){
-
         if(infoDino){
             View v = this.findViewById(android.R.id.content);
             if(d.getDiet()!=null) {
